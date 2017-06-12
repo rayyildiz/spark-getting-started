@@ -2,6 +2,7 @@ package me.rayyildiz
 
 import org.apache.spark.ml.feature.StandardScaler
 
+
 /**
   * Created by rayyildiz on 6/12/2017.
   */

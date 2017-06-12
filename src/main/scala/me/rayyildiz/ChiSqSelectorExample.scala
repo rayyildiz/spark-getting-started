@@ -8,6 +8,7 @@ import org.apache.spark.ml.linalg.Vectors
   */
 object ChiSqSelectorExample extends App with SparkSupport {
 
+
   val data = Seq(
     (7, Vectors.dense(0.0, 0.0, 18.0, 1.0), 1.0),
     (8, Vectors.dense(0.0, 1.0, 12.0, 0.0), 0.0),
