@@ -7,10 +7,13 @@ import org.apache.spark.ml.feature.{CountVectorizer, CountVectorizerModel}
   */
 object CountVectorizerExample extends App with SparkSupport {
 
-  val df = spark.createDataFrame(Seq(
-    (0, Array("a", "b", "c")),
-    (1, Array("a", "b", "b", "c", "a"))
-  )).toDF("id", "words")
+  val df = spark
+    .createDataFrame(
+      Seq(
+        (0, Array("a", "b", "c")),
+        (1, Array("a", "b", "b", "c", "a"))
+      ))
+    .toDF("id", "words")
 
   // fit a CountVectorizerModel from the corpus
   val cvModel: CountVectorizerModel = new CountVectorizer()

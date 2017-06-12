@@ -8,11 +8,14 @@ import org.apache.spark.ml.linalg.Vectors
   */
 object NormalizerExample extends App with SparkSupport {
 
-  val dataFrame = spark.createDataFrame(Seq(
-    (0, Vectors.dense(1.0, 0.5, -1.0)),
-    (1, Vectors.dense(2.0, 1.0, 1.0)),
-    (2, Vectors.dense(4.0, 10.0, 2.0))
-  )).toDF("id", "features")
+  val dataFrame = spark
+    .createDataFrame(
+      Seq(
+        (0, Vectors.dense(1.0, 0.5, -1.0)),
+        (1, Vectors.dense(2.0, 1.0, 1.0)),
+        (2, Vectors.dense(4.0, 10.0, 2.0))
+      ))
+    .toDF("id", "features")
 
   // Normalize each Vector using $L^1$ norm.
   val normalizer = new Normalizer()

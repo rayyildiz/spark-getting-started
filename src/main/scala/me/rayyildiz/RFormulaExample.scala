@@ -7,12 +7,14 @@ import org.apache.spark.ml.feature.RFormula
   */
 object RFormulaExample extends App with SparkSupport {
 
-
-  val dataset = spark.createDataFrame(Seq(
-    (7, "US", 18, 1.0),
-    (8, "CA", 12, 0.0),
-    (9, "NZ", 15, 0.0)
-  )).toDF("id", "country", "hour", "clicked")
+  val dataset = spark
+    .createDataFrame(
+      Seq(
+        (7, "US", 18, 1.0),
+        (8, "CA", 12, 0.0),
+        (9, "NZ", 15, 0.0)
+      ))
+    .toDF("id", "country", "hour", "clicked")
 
   val formula = new RFormula()
     .setFormula("clicked ~ country + hour")

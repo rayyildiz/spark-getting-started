@@ -8,12 +8,14 @@ import org.apache.spark.ml.linalg.Vectors
   */
 object MaxAbsScalerExample extends App with SparkSupport {
 
-
-  val dataFrame = spark.createDataFrame(Seq(
-    (0, Vectors.dense(1.0, 0.1, -8.0)),
-    (1, Vectors.dense(2.0, 1.0, -4.0)),
-    (2, Vectors.dense(4.0, 10.0, 8.0))
-  )).toDF("id", "features")
+  val dataFrame = spark
+    .createDataFrame(
+      Seq(
+        (0, Vectors.dense(1.0, 0.1, -8.0)),
+        (1, Vectors.dense(2.0, 1.0, -4.0)),
+        (2, Vectors.dense(4.0, 10.0, 8.0))
+      ))
+    .toDF("id", "features")
 
   val scaler = new MaxAbsScaler()
     .setInputCol("features")
