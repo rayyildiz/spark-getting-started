@@ -1,5 +1,5 @@
 name := "seq-spark"
-
+organization := "me.rayyildiz"
 version := "1.0"
 
 scalaVersion := "2.11.11"
