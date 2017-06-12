@@ -7,6 +7,7 @@ target
 /.settings
 /RUNNING_PID
 
+data/
 # Created by https://www.gitignore.io/api/macos,jetbrains,sbt,scala,vim,ensime,emacs,sublimetext
 
 ### macOS ###

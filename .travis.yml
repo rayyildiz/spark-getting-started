@@ -1,17 +1,43 @@
 language: scala
 jdk:
 - openjdk8
-- oraclejdk8
+#- oraclejdk8
 scala:
-- 2.11.8
-- 2.11.10
+#- 2.11.8
 - 2.11.12
 install:
   - sudo apt-get update && sudo apt-get --assume-yes install zip unzip
 script:
 - sbt clean compile test
-- sbt "runMain com.rayyildiz.examples.DataTable"
-- sbt "runMain com.rayyildiz.examples.WordCount"
+- sbt "runMain com.rayyildiz.intro.DataTable"
+#- sbt "runMain com.rayyildiz.intro.WordCount"
+- sbt "runMain com.rayyildiz.examples.BinarizerExample"
+- sbt "runMain com.rayyildiz.examples.BucketizerExample"
+- sbt "runMain com.rayyildiz.examples.ChiSqSelectorExample"
+- sbt "runMain com.rayyildiz.examples.CountVectorizerExample"
+- sbt "runMain com.rayyildiz.examples.DiscreteCosineTransformExample"
+- sbt "runMain com.rayyildiz.examples.ElementwiseProductExample"
+- sbt "runMain com.rayyildiz.examples.FirstExample"
+- sbt "runMain com.rayyildiz.examples.IndexToStringExample"
+- sbt "runMain com.rayyildiz.examples.InteractionExample"
+- sbt "runMain com.rayyildiz.examples.MaxAbsScalerExample"
+- sbt "runMain com.rayyildiz.examples.MinMaxScalerExample"
+- sbt "runMain com.rayyildiz.examples.NGramExample"
+- sbt "runMain com.rayyildiz.examples.NormalizerExample"
+- sbt "runMain com.rayyildiz.examples.OneHotEncoderExample"
+- sbt "runMain com.rayyildiz.examples.PCAExample"
+- sbt "runMain com.rayyildiz.examples.PolynomialExpansionExample"
+- sbt "runMain com.rayyildiz.examples.QuantileDiscretizerExample"
+- sbt "runMain com.rayyildiz.examples.RFormulaExample"
+- sbt "runMain com.rayyildiz.examples.SQLTransformerExample"
+- sbt "runMain com.rayyildiz.examples.StandardScalerExample"
+- sbt "runMain com.rayyildiz.examples.StopWordsRemoverExample"
+- sbt "runMain com.rayyildiz.examples.StringIndexerExample"
+- sbt "runMain com.rayyildiz.examples.TokenizerExample"
+- sbt "runMain com.rayyildiz.examples.VectorAssemblerExample"
+- sbt "runMain com.rayyildiz.examples.VectorIndexerExample"
+- sbt "runMain com.rayyildiz.examples.VectorSlicerExample"
+- sbt "runMain com.rayyildiz.examples.Word2VecExample"
 notifications:
   email: false
   slack:

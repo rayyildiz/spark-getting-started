@@ -1,8 +1,7 @@
 Getting Started 
 ===
 
-[![Build Status](https://travis-ci.org/rayyildiz/SparkGettingStarted.svg?branch=master)](https://travis-ci.org/rayyildiz/SparkGettingStarted)
-
+[![Build Status](https://travis-ci.org/rayyildiz/spark-getting-started.svg?branch=master)](https://travis-ci.org/rayyildiz/spark-getting-started)
 
 [Word Count](src/main/scala/com/rayyildiz/examples/WordCount.scala) 
 ---
