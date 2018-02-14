@@ -1,4 +1,12 @@
-data/
+data/*.zip
+data/*.bz2
+data/masc_500k_texts/
+data/data/
+data/*.txt
+data/AFINN/
+data/*.json
+data/data/
 target/
 *.iml
 .idea/
+log/

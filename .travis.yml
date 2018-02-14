@@ -1,0 +1,18 @@
+language: scala
+jdk:
+- openjdk8
+- oraclejdk8
+scala:
+- 2.11.8
+- 2.11.10
+- 2.11.12
+install:
+  - sudo apt-get update && sudo apt-get --assume-yes install zip unzip
+script:
+- sbt clean compile test
+- sbt "runMain com.rayyildiz.examples.DataTable"
+- sbt "runMain com.rayyildiz.examples.WordCount"
+notifications:
+  email: false
+  slack:
+    secure: CRgrbEWwhUrTc0O3Z1PkIH26Oj/ind/Pz4Skz96zFUXSy+FPNWnIKKwfkTOIfeiesOhfpQhM8GO1lJ874dt3c0o1OegF6iCcW9pYWj48uUyKjKtvkfakfwhdY1HM9L4UXZdSXq1U+uMwSHNjvZjfy6jVlyPQzRcpbUimZnHtbAGyjGqSez+qSTDwQWJp3f2NV2DnzbaNegSaOTjhPDWB+MuZPWiUVqF111Y+XtHUBw7Tq+J6sjIEor/wlH6HjDkIPKn/VCH5YQivps0+VxKJiFb3AbMKdbc/WEx3e7+X6EDc/6QY8cbYHJbZGr7eWRYE4J1qQ7AcDHpDZkHbUZ5cPhrTLRspPdpkdNWZKKIHjNf5l+PRY7kbnto97FXuJItKfRuJIR9f7SniaP/wC6FDHOGUSMcLYCaSri0ry+lQbyedXAP12U+XcYEV7/bed9ZmRcsbimWvC2SyLnaXpFd2SCfC8CSblAArNegbeSFMidbpxs62XPnvu5DYOTjOIdzdz6QAC/NGh+OzIbtbalRgg5iv3nE94KswYXrQOl1Vsq/ExIQoYphnVVh+WSAfWfAhznKPCBm6a16BRbmjdokCO/iuoep4Bby7eUBwRIkBPDOuToJvSQx1PrgntXL7lSfjK1FW6vBX1DcwpezFrm7oK5mQ5CxeBcjjTKXkXsp5RuQ=

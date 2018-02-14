@@ -1,32 +1,25 @@
 package com.rayyildiz.examples
 
 import com.rayyildiz.examples.utils.DownloadManager
-import org.apache.spark.sql.SparkSession
 
-import scala.io.StdIn
+object WordCount extends App with SparkContext {
 
-object WordCount extends App {
+  // Let's download MASC data from American National Corpus
+  DownloadManager.download("http://www.anc.org/MASC/download/masc_500k_texts.zip", "./data/masc_500k_texts.zip")
 
-  if (System.getProperty("hadoop.home.dir") == null || System.getProperty("hadoop.home.dir").isEmpty) {
+  // Read all txt files and cache
+  val textFile = spark.read.textFile("./data/masc_500k_texts/spoken/*/*.txt", "./data/masc_500k_texts/spoken/*/*.txt").cache()
 
-    System.setProperty("hadoop.home.dir", "D:\\Apps\\BigData\\hadoop\\hadoop-2.9.0\\")
-  }
-
-  DownloadManager.download("http://www.anc.org/MASC/download/masc_500k_texts.zip", "data/masc_500k_texts.zip")
-
-  val spark = SparkSession.builder.appName("WordCount").master("local[*]").getOrCreate()
-
-
-  val textFile = spark.read.textFile("data/masc_500k_texts/written/*/*.txt", "data/masc_500k_texts/spoken/*/*.txt").cache()
-
+  // Let's count the 'and', 'or' and ' ' (SPACE)
   val numAnd = textFile.filter(line => line.contains("and")).count()
   val numOr = textFile.filter(line => line.contains("or")).count()
+  val numSpace = textFile.filter(line => line.contains(" ")).count()
 
-  println(s"Lines with 'and': $numAnd, Lines with 'or': $numOr")
+  log.info(s"'and': $numAnd, 'or': $numOr,  [SPACE]: $numSpace")
 
 
-  print("To finish press [ENTER] button ")
-  StdIn.readLine()
+  // Wait for enter , so you can see the spark UI
+  // waitForEnter
 
   spark.stop()
 }

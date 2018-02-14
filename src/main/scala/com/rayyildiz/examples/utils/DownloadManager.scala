@@ -1,13 +1,17 @@
 package com.rayyildiz.examples.utils
 
-import java.io.{File, FileInputStream, FileOutputStream, InputStream}
+import java.io.{File, FileInputStream, FileOutputStream}
 import java.net.URL
-import java.nio.file.Path
-import java.util.zip.{GZIPInputStream, ZipInputStream}
+import java.util.zip.ZipInputStream
+
+import org.apache.log4j.LogManager
 
 import scala.sys.process._
 
+
 object DownloadManager {
+
+  private val log = LogManager.getLogger(DownloadManager.getClass)
 
   /**
     * Download file from internet.
@@ -18,18 +22,26 @@ object DownloadManager {
   def download(url: String, targetFile: String): Unit = {
     val target = new File(targetFile)
     if (target.exists()) {
-      println(s"file ${target.getName} exist.")
+      log.info(s"file ${target.getName} exist.")
     } else {
-      println(s"downloading $url as $targetFile")
+      log.info(s"downloading $url as $targetFile")
       new URL(url) #> target !!
 
-      println(s"download finished. Unzip file.")
-      unzip(target, target.getParentFile)
-      println(s"unzip finished. ${target.getAbsolutePath}")
+      log.info(s"download finished.")
+      if (target.getName.endsWith("zip")) {
+        unzip(target, target.getParentFile)
+        log.info(s"unzip finished. ${target.getAbsolutePath}")
+      }
     }
   }
 
 
+  /**
+    * Unzip zip file to destination folder.
+    *
+    * @param file            ZipFile
+    * @param destinationFile destination path.
+    */
   def unzip(file: File, destinationFile: File): Unit = {
     val zipFile = new FileInputStream(file)
     val destination = destinationFile.toPath
@@ -51,4 +63,5 @@ object DownloadManager {
       }
     }
   }
+
 }
