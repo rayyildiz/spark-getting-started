@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -98,5 +98,6 @@ object TwitterStreaming extends App with SparkSupport {
 
   // Wait for enter , so you can see the spark UI
   // waitForEnter
-  spark.close()
+
+  close()
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,7 +19,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
+package com.rayyildiz.examples.ml
+
 import com.rayyildiz.SparkSupport
 import org.apache.spark.ml.feature.{HashingTF, IDF, Tokenizer}
 
@@ -53,6 +54,8 @@ object FirstExample extends App with SparkSupport {
   val idfModel = idf.fit(featurizedData)
 
   val rescaledData = idfModel.transform(featurizedData)
-  rescaledData.select("label", "features").show()
+  val resultDF = rescaledData.select("label", "features")
+  resultDF.show()
 
+  close()
 }

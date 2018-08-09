@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,39 +19,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
+package com.rayyildiz.examples.ml
+
 import com.rayyildiz.SparkSupport
-import org.apache.spark.ml.feature.{OneHotEncoder, StringIndexer}
+import org.apache.spark.ml.feature.Binarizer
 
 /**
  * Created by rayyildiz on 6/12/2017.
  */
-object OneHotEncoderExample extends App with SparkSupport {
+object BinarizerExample extends App with SparkSupport {
 
-  val df = spark
-    .createDataFrame(
-      Seq(
-        (0, "a"),
-        (1, "b"),
-        (2, "c"),
-        (3, "a"),
-        (4, "a"),
-        (5, "c")
-      )
-    )
-    .toDF("id", "category")
+  val data = Array((0, 0.1), (1, 0.8), (2, 0.2))
+  val dataFrame = spark.createDataFrame(data).toDF("id", "feature")
 
-  val indexer = new StringIndexer()
-    .setInputCol("category")
-    .setOutputCol("categoryIndex")
-    .fit(df)
-  val indexed = indexer.transform(df)
+  val binarizer: Binarizer = new Binarizer()
+    .setInputCol("feature")
+    .setOutputCol("binary_feature")
+    .setThreshold(0.5)
 
-  val encoder = new OneHotEncoder()
-    .setInputCol("categoryIndex")
-    .setOutputCol("categoryVec")
+  val binarizedDF = binarizer.transform(dataFrame)
 
-  val encoded = encoder.transform(indexed)
-  encoded.show()
+  log.info(s"Binarizer output with Threshold = ${binarizer.getThreshold}")
+  binarizedDF.show()
 
+  close()
 }

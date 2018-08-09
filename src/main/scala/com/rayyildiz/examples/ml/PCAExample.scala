@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,19 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
+package com.rayyildiz.examples.ml
+
 import com.rayyildiz.SparkSupport
-import org.apache.spark.ml.feature.SQLTransformer
+import org.apache.spark.ml.feature.PCA
+import org.apache.spark.ml.linalg.Vectors
 
 /**
  * Created by rayyildiz on 6/12/2017.
  */
-object SQLTransformerExample extends App with SparkSupport {
+object PCAExample extends App with SparkSupport {
 
-  val df = spark.createDataFrame(Seq((0, 1.0, 3.0), (2, 2.0, 5.0))).toDF("id", "v1", "v2")
+  val data = Array(
+    Vectors.sparse(5, Seq((1, 1.0), (3, 7.0))),
+    Vectors.dense(2.0, 0.0, 3.0, 4.0, 5.0),
+    Vectors.dense(4.0, 0.0, 0.0, 6.0, 7.0)
+  )
+  val df = spark.createDataFrame(data.map(Tuple1.apply)).toDF("features")
 
-  val sqlTrans = new SQLTransformer().setStatement("SELECT *, (v1 + v2) AS v3, (v1 * v2) AS v4 FROM __THIS__")
+  val pca = new PCA()
+    .setInputCol("features")
+    .setOutputCol("pcaFeatures")
+    .setK(3)
+    .fit(df)
 
-  sqlTrans.transform(df).show()
+  val resultDF = pca.transform(df).select("pcaFeatures")
+  resultDF.show(false)
 
+  close()
 }

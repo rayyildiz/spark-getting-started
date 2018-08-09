@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,28 +19,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
+package com.rayyildiz.examples.ml
+
 import com.rayyildiz.SparkSupport
-import org.apache.spark.ml.feature.VectorAssembler
-import org.apache.spark.ml.linalg.Vectors
+import org.apache.spark.ml.feature.{RegexTokenizer, Tokenizer}
+import org.apache.spark.sql.functions.{col, udf}
 
 /**
  * Created by rayyildiz on 6/12/2017.
  */
-object VectorAssemblerExample extends App with SparkSupport {
+object TokenizerExample extends App with SparkSupport {
 
-  val dataset = spark
+  val sentenceDataFrame = spark
     .createDataFrame(
-      Seq((0, 18, 1.0, Vectors.dense(0.0, 10.0, 0.5), 1.0))
+      Seq(
+        (0, "Hi I heard about Spark"),
+        (1, "I wish Java could use data/case classes"),
+        (2, "Logistic,regression,models,are,neat")
+      )
     )
-    .toDF("id", "hour", "mobile", "userFeatures", "clicked")
+    .toDF("id", "sentence")
 
-  val assembler = new VectorAssembler()
-    .setInputCols(Array("hour", "mobile", "userFeatures"))
-    .setOutputCol("features")
+  val tokenizer = new Tokenizer().setInputCol("sentence").setOutputCol("words")
+  val regexTokenizer = new RegexTokenizer()
+    .setInputCol("sentence")
+    .setOutputCol("words")
+    .setPattern("\\W")
 
-  val output = assembler.transform(dataset)
-  println("Assembled columns 'hour', 'mobile', 'userFeatures' to vector column 'features'")
-  output.select("features", "clicked").show(false)
+  val countTokens = udf { words: Seq[String] =>
+    words.length
+  }
 
+  val tokenized = tokenizer.transform(sentenceDataFrame)
+  tokenized
+    .select("sentence", "words")
+    .withColumn("tokens", countTokens(col("words")))
+    .show(false)
+
+  val regexTokenized = regexTokenizer.transform(sentenceDataFrame)
+  val resultDF = regexTokenized
+    .select("sentence", "words")
+    .withColumn("tokens", countTokens(col("words")))
+
+  resultDF.show(false)
+
+  close()
 }

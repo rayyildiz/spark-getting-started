@@ -6,7 +6,7 @@ target
 /.project
 /.settings
 /RUNNING_PID
-
+log/
 data/
 # Created by https://www.gitignore.io/api/macos,jetbrains,sbt,scala,vim,ensime,emacs,sublimetext
 

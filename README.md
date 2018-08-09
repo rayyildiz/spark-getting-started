@@ -1,10 +1,13 @@
-Getting Started 
-===
+# Spark Getting Started 
 
 [![Build Status](https://travis-ci.org/rayyildiz/spark-getting-started.svg?branch=master)](https://travis-ci.org/rayyildiz/spark-getting-started)
 
-[Word Count](src/main/scala/com/rayyildiz/examples/WordCount.scala) 
----
+This repository contains examples in order learn [Apache Spark](https://spark.apache.org/) . 
+
+## First Examples 
+
+
+### [Word Count](src/main/scala/com/rayyildiz/examples/WordCount.scala) 
 
 Download [Manually Annotated Sub-Corpus (MASC) ](http://www.anc.org/data/masc/) 500k file and count by word. 
 
@@ -15,8 +18,8 @@ Download [Manually Annotated Sub-Corpus (MASC) ](http://www.anc.org/data/masc/) 
 ```
 
 
-[Data Table](src/main/scala/com/rayyildiz/examples/DataTable.scala) 
----
+### [Data Table](src/main/scala/com/rayyildiz/examples/DataTable.scala) 
+
 
 Download [US Investor Flow of Funds into Investment Classes](http://datahub.io/core/investor-flow-of-funds-us), create a table and list top 10 rows order by total.
 
@@ -40,16 +43,48 @@ spark.sql("SELECT * FROM monthly WHERE total > 10000 ORDER BY total desc").show(
 |2007-07-31|      -5089|          2587|        198|  4431|    17118|       4630|         9901|14990|
 |2010-12-31|     -12537|          3889|     -13307| -8008|   -16144|     -21314|         1281|13818|
 
+## Twitter Analysis Examples
 
-[Analysing Tweets](src/main/scala/com/rayyildiz/examples/AnalyzingTweets.scala)
----
+### [Analysing Tweets](src/main/scala/com/rayyildiz/examples/AnalyzingTweets.scala)
 
 Define ```TWITTER_CONSUMER_KEY``` , ```TWITTER_CONSUMER_SECRET``` , ```TWITTER_ACCESS_TOKEN``` and ```TWITTER_ACCESS_SECRET``` as  system environment  before running. 
 
 
 
-[Twitter Streaming](src/main/scala/com/rayyildiz/examples/TwitterStreaming.scala)
----
+### [Twitter Streaming](src/main/scala/com/rayyildiz/examples/TwitterStreaming.scala)
  
 Define ```TWITTER_CONSUMER_KEY``` , ```TWITTER_CONSUMER_SECRET```, ```TWITTER_ACCESS_TOKEN```, ```TWITTER_ACCESS_SECRET``` as enviropment variable before running program.
 You need to create a [Twitter App](https://apps.twitter.com/)  and [generate token](https://developer.twitter.com/en/docs/basics/authentication/guides/access-tokens)
+
+
+## Machine Learning Examples
+
+There are machine learning examples based on [Spark ML documentation](https://spark.apache.org/docs/latest/ml-guide.html). 
+
+- [First Example](src/main/scala/com/rayyildiz/examples/ml/FirstExample.scala)
+- [Binarizer Example](src/main/scala/com/rayyildiz/examples/ml/BinarizerExample.scala)
+- [Bucketizer Example](src/main/scala/com/rayyildiz/examples/ml/BucketizerExample.scala)
+- [ChiSqSelector Example](src/main/scala/com/rayyildiz/examples/ml/ChiSqSelectorExample.scala)
+- [Count Vectorizer Example](src/main/scala/com/rayyildiz/examples/ml/CountVectorizerExample.scala)
+- [Discrete Cosine Transform Example](src/main/scala/com/rayyildiz/examples/ml/DiscreteCosineTransformExample.scala)
+- [Elementwise Product Example](src/main/scala/com/rayyildiz/examples/ml/ElementwiseProductExample.scala)
+- [IndexToString Example](src/main/scala/com/rayyildiz/examples/ml/IndexToStringExample.scala)
+- [Interaction Example](src/main/scala/com/rayyildiz/examples/ml/InteractionExample.scala)
+- [MaxAbs Scaler Example](src/main/scala/com/rayyildiz/examples/ml/MaxAbsScalerExample.scala)
+- [MinMax Scaler Example](src/main/scala/com/rayyildiz/examples/ml/MinMaxScalerExample.scala)
+- [NGram Example](src/main/scala/com/rayyildiz/examples/ml/NGramExample.scala)
+- [Normalizer Example](src/main/scala/com/rayyildiz/examples/ml/NormalizerExample.scala)
+- [One Hot Encoder Example](src/main/scala/com/rayyildiz/examples/ml/OneHotEncoderExample.scala)
+- [PCA Example](src/main/scala/com/rayyildiz/examples/ml/PCAExample.scala)
+- [Polynomial Expansion Example](src/main/scala/com/rayyildiz/examples/ml/PolynomialExpansionExample.scala)
+- [Quantile Discretizer Example](src/main/scala/com/rayyildiz/examples/ml/QuantileDiscretizerExample.scala)
+- [RFormula Example](src/main/scala/com/rayyildiz/examples/ml/RFormulaExample.scala)
+- [SQL Transformer Example](src/main/scala/com/rayyildiz/examples/ml/SQLTransformerExample.scala)
+- [Standard Scaler Example](src/main/scala/com/rayyildiz/examples/ml/StandardScalerExample.scala)
+- [StopWords Remover Example](src/main/scala/com/rayyildiz/examples/ml/StopWordsRemoverExample.scala)
+- [String Indexer Example](src/main/scala/com/rayyildiz/examples/ml/StringIndexerExample.scala)
+- [Tokenizer Example](src/main/scala/com/rayyildiz/examples/ml/TokenizerExample.scala)
+- [Vector Assembler Example](src/main/scala/com/rayyildiz/examples/ml/VectorAssemblerExample.scala)
+- [Vector Indexer Example](src/main/scala/com/rayyildiz/examples/ml/VectorIndexerExample.scala)
+- [Vector Slicer Example](src/main/scala/com/rayyildiz/examples/ml/VectorSlicerExample.scala)
+- [Word2Vec Example](src/main/scala/com/rayyildiz/examples/ml/Word2VecExample.scala)

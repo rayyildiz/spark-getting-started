@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,35 +19,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
+package com.rayyildiz.examples.ml
+
 import com.rayyildiz.SparkSupport
-import org.apache.spark.ml.feature.ChiSqSelector
-import org.apache.spark.ml.linalg.Vectors
+import org.apache.spark.ml.feature.{CountVectorizer, CountVectorizerModel}
 
 /**
  * Created by rayyildiz on 6/12/2017.
  */
-object ChiSqSelectorExample extends App with SparkSupport {
+object CountVectorizerExample extends App with SparkSupport {
 
-  val data = Seq(
-    (7, Vectors.dense(0.0, 0.0, 18.0, 1.0), 1.0),
-    (8, Vectors.dense(0.0, 1.0, 12.0, 0.0), 0.0),
-    (9, Vectors.dense(1.0, 0.0, 15.0, 0.1), 0.0)
-  )
+  val df = spark
+    .createDataFrame(
+      Seq(
+        (0, Array("a", "b", "c")),
+        (1, Array("a", "b", "b", "c", "a"))
+      )
+    )
+    .toDF("id", "words")
 
-  import spark.implicits._
+  // fit a CountVectorizerModel from the corpus
+  val cvModel: CountVectorizerModel = new CountVectorizer()
+    .setInputCol("words")
+    .setOutputCol("features")
+    .setVocabSize(3)
+    .setMinDF(2)
+    .fit(df)
 
-  val df = spark.createDataset(data).toDF("id", "features", "clicked")
+  // alternatively, define CountVectorizerModel with a-priori vocabulary
+  val cvm = new CountVectorizerModel(Array("a", "b", "c"))
+    .setInputCol("words")
+    .setOutputCol("features")
 
-  val selector = new ChiSqSelector()
-    .setNumTopFeatures(1)
-    .setFeaturesCol("features")
-    .setLabelCol("clicked")
-    .setOutputCol("selectedFeatures")
+  val resultDF = cvModel.transform(df)
 
-  val result = selector.fit(df).transform(df)
+  resultDF.show(false)
 
-  println(s"ChiSqSelector output with top ${selector.getNumTopFeatures} features selected")
-  result.show()
-
+  close()
 }

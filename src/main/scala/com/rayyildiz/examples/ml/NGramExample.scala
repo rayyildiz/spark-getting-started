@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,31 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
+package com.rayyildiz.examples.ml
+
 import com.rayyildiz.SparkSupport
-import com.rayyildiz.utils.DownloadManager
-import org.apache.spark.ml.feature.StandardScaler
+import org.apache.spark.ml.feature.NGram
 
 /**
  * Created by rayyildiz on 6/12/2017.
  */
-object StandardScalerExample extends App with SparkSupport {
+object NGramExample extends App with SparkSupport {
 
-  DownloadManager.download("https://raw.githubusercontent.com/apache/spark/master/data/mllib/sample_libsvm_data.txt","./data/sample_libsvm_data.txt")
+  val wordDataFrame = spark
+    .createDataFrame(
+      Seq(
+        (0, Array("Hi", "I", "heard", "about", "Spark")),
+        (1, Array("I", "wish", "Java", "could", "use", "case", "classes")),
+        (2, Array("Logistic", "regression", "models", "are", "neat"))
+      )
+    )
+    .toDF("id", "words")
 
-  val dataFrame = spark.read.format("libsvm").load("./data/sample_libsvm_data.txt")
+  val ngram = new NGram().setN(2).setInputCol("words").setOutputCol("ngrams")
 
-  val scaler = new StandardScaler()
-    .setInputCol("features")
-    .setOutputCol("scaledFeatures")
-    .setWithStd(true)
-    .setWithMean(false)
+  val ngramDataFrame = ngram.transform(wordDataFrame)
+  val resultDF = ngramDataFrame.select("ngrams")
 
-  // Compute summary statistics by fitting the StandardScaler.
-  val scalerModel = scaler.fit(dataFrame)
+  resultDF.show()
 
-  // Normalize each feature to have unit standard deviation.
-  val scaledData = scalerModel.transform(dataFrame)
-  scaledData.show()
+  close()
 
 }

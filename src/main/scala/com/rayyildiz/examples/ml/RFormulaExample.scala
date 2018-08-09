@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,46 +19,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
+package com.rayyildiz.examples.ml
+
 import com.rayyildiz.SparkSupport
-import org.apache.spark.ml.feature.{RegexTokenizer, Tokenizer}
-import org.apache.spark.sql.functions._
+import org.apache.spark.ml.feature.RFormula
 
 /**
  * Created by rayyildiz on 6/12/2017.
  */
-object TokenizerExample extends App with SparkSupport {
+object RFormulaExample extends App with SparkSupport {
 
-  val sentenceDataFrame = spark
+  val dataset = spark
     .createDataFrame(
       Seq(
-        (0, "Hi I heard about Spark"),
-        (1, "I wish Java could use case classes"),
-        (2, "Logistic,regression,models,are,neat")
+        (7, "US", 18, 1.0),
+        (8, "CA", 12, 0.0),
+        (9, "NZ", 15, 0.0)
       )
     )
-    .toDF("id", "sentence")
+    .toDF("id", "country", "hour", "clicked")
 
-  val tokenizer = new Tokenizer().setInputCol("sentence").setOutputCol("words")
-  val regexTokenizer = new RegexTokenizer()
-    .setInputCol("sentence")
-    .setOutputCol("words")
-    .setPattern("\\W") // alternatively .setPattern("\\w+").setGaps(false)
+  val formula = new RFormula()
+    .setFormula("clicked ~ country + hour")
+    .setFeaturesCol("features")
+    .setLabelCol("label")
 
-  val countTokens = udf { (words: Seq[String]) =>
-    words.length
-  }
+  val output = formula.fit(dataset).transform(dataset)
+  val resultDF = output.select("features", "label")
 
-  val tokenized = tokenizer.transform(sentenceDataFrame)
-  tokenized
-    .select("sentence", "words")
-    .withColumn("tokens", countTokens(col("words")))
-    .show(false)
+  resultDF.show()
 
-  val regexTokenized = regexTokenizer.transform(sentenceDataFrame)
-  regexTokenized
-    .select("sentence", "words")
-    .withColumn("tokens", countTokens(col("words")))
-    .show(false)
-
+  close()
 }

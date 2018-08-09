@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,38 +19,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
-import com.rayyildiz.SparkSupport
-import org.apache.spark.ml.attribute.{Attribute, AttributeGroup, NumericAttribute}
-import org.apache.spark.ml.feature.VectorSlicer
-import org.apache.spark.ml.linalg.Vectors
-import org.apache.spark.sql.Row
-import org.apache.spark.sql.types.StructType
+package com.rayyildiz.examples.ml
 
-import java.util.Arrays
+import com.rayyildiz.SparkSupport
+import org.apache.spark.ml.feature.{Interaction, VectorAssembler}
 
 /**
  * Created by rayyildiz on 6/12/2017.
  */
-object VectorSlicerExample extends App with SparkSupport {
+object InteractionExample extends App with SparkSupport {
 
-  val data = Arrays.asList(
-    Row(Vectors.sparse(3, Seq((0, -2.0), (1, 2.3)))),
-    Row(Vectors.dense(-2.0, 2.3, 0.0))
-  )
+  val df = spark
+    .createDataFrame(
+      Seq(
+        (1, 1, 2, 3, 8, 4, 5),
+        (2, 4, 3, 8, 7, 9, 8),
+        (3, 6, 1, 9, 2, 3, 6),
+        (4, 10, 8, 6, 9, 4, 5),
+        (5, 9, 2, 7, 10, 7, 3),
+        (6, 1, 1, 4, 2, 8, 4)
+      )
+    )
+    .toDF("id1", "id2", "id3", "id4", "id5", "id6", "id7")
 
-  val defaultAttr = NumericAttribute.defaultAttr
-  val attrs = Array("f1", "f2", "f3").map(defaultAttr.withName)
-  val attrGroup = new AttributeGroup("userFeatures", attrs.asInstanceOf[Array[Attribute]])
+  val assembler1 = new VectorAssembler().setInputCols(Array("id2", "id3", "id4")).setOutputCol("vec1")
 
-  val dataset = spark.createDataFrame(data, StructType(Array(attrGroup.toStructField())))
+  val assembled1 = assembler1.transform(df)
 
-  val slicer = new VectorSlicer().setInputCol("userFeatures").setOutputCol("features")
+  val assembler2 = new VectorAssembler().setInputCols(Array("id5", "id6", "id7")).setOutputCol("vec2")
 
-  slicer.setIndices(Array(1)).setNames(Array("f3"))
-  // or slicer.setIndices(Array(1, 2)), or slicer.setNames(Array("f2", "f3"))
+  val assembled2 = assembler2.transform(assembled1).select("id1", "vec1", "vec2")
 
-  val output = slicer.transform(dataset)
-  output.show(false)
+  val interaction = new Interaction()
+    .setInputCols(Array("id1", "vec1", "vec2"))
+    .setOutputCol("interactedCol")
 
+  val interactedDF = interaction.transform(assembled2)
+
+  interactedDF.show(truncate = false)
+
+  close()
 }

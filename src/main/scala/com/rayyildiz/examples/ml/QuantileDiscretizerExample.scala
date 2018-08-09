@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,33 +19,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
+package com.rayyildiz.examples.ml
+
 import com.rayyildiz.SparkSupport
-import com.rayyildiz.utils.DownloadManager
-import org.apache.spark.ml.feature.VectorIndexer
+import org.apache.spark.ml.feature.QuantileDiscretizer
 
 /**
  * Created by rayyildiz on 6/12/2017.
  */
-object VectorIndexerExample extends App with SparkSupport {
-  DownloadManager.download("https://raw.githubusercontent.com/apache/spark/master/data/mllib/sample_libsvm_data.txt","./data/sample_libsvm_data.txt")
+object QuantileDiscretizerExample extends App with SparkSupport {
 
-  val data = spark.read.format("libsvm").load("./data/sample_libsvm_data.txt")
+  val data = Array((0, 18.0), (1, 19.0), (2, 8.0), (3, 5.0), (4, 2.2))
+  val df = spark.createDataFrame(data).toDF("id", "hour")
 
-  val indexer = new VectorIndexer()
-    .setInputCol("features")
-    .setOutputCol("indexed")
-    .setMaxCategories(10)
+  val discretizer = new QuantileDiscretizer()
+    .setInputCol("hour")
+    .setOutputCol("result")
+    .setNumBuckets(3)
 
-  val indexerModel = indexer.fit(data)
+  val resultDF = discretizer.fit(df).transform(df)
+  resultDF.show()
 
-  val categoricalFeatures: Set[Int] = indexerModel.categoryMaps.keys.toSet
-  println(
-    s"Chose ${categoricalFeatures.size} categorical features: " +
-      categoricalFeatures.mkString(", ")
-  )
-
-  // Create new column "indexed" with categorical values transformed to indices
-  val indexedData = indexerModel.transform(data)
-  indexedData.show()
+  close()
 }

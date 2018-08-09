@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,25 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
+package com.rayyildiz.examples.ml
+
 import com.rayyildiz.SparkSupport
-import org.apache.spark.ml.feature.Binarizer
+import org.apache.spark.ml.feature.ElementwiseProduct
+import org.apache.spark.ml.linalg.Vectors
 
 /**
  * Created by rayyildiz on 6/12/2017.
  */
-object BinarizerExample extends App with SparkSupport {
+object ElementwiseProductExample extends App with SparkSupport {
 
-  val data = Array((0, 0.1), (1, 0.8), (2, 0.2))
-  val dataFrame = spark.createDataFrame(data).toDF("id", "feature")
+  // Create some vector data; also works for sparse vectors
+  val dataFrame = spark
+    .createDataFrame(Seq(("a", Vectors.dense(1.0, 2.0, 3.0)), ("b", Vectors.dense(4.0, 5.0, 6.0))))
+    .toDF("id", "vector")
 
-  val binarizer: Binarizer = new Binarizer()
-    .setInputCol("feature")
-    .setOutputCol("binarized_feature")
-    .setThreshold(0.5)
+  val transformingVector = Vectors.dense(0.0, 1.0, 2.0)
+  val transformer = new ElementwiseProduct()
+    .setScalingVec(transformingVector)
+    .setInputCol("vector")
+    .setOutputCol("transformedVector")
 
-  val binarizedDataFrame = binarizer.transform(dataFrame)
+  // Batch transform the vectors to create new column:
+  val resultDF = transformer.transform(dataFrame)
 
-  println(s"Binarizer output with Threshold = ${binarizer.getThreshold}")
-  binarizedDataFrame.show()
+  resultDF.show()
+
+  close()
 }

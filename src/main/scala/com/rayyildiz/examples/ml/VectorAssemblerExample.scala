@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,28 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
+package com.rayyildiz.examples.ml
+
 import com.rayyildiz.SparkSupport
-import org.apache.spark.ml.feature.Bucketizer
+import org.apache.spark.ml.feature.VectorAssembler
+import org.apache.spark.ml.linalg.Vectors
 
 /**
  * Created by rayyildiz on 6/12/2017.
  */
-object BucketizerExample extends App with SparkSupport {
+object VectorAssemblerExample extends App with SparkSupport {
 
-  val splits = Array(Double.NegativeInfinity, -0.5, 0.0, 0.5, Double.PositiveInfinity)
+  val dataset = spark
+    .createDataFrame(
+      Seq((0, 18, 1.0, Vectors.dense(0.0, 10.0, 0.5), 1.0))
+    )
+    .toDF("id", "hour", "mobile", "user_features", "clicked")
 
-  val data = Array(-999.9, -0.5, -0.3, 0.0, 0.2, 999.9)
-  val dataFrame = spark.createDataFrame(data.map(Tuple1.apply)).toDF("features")
+  val assembler = new VectorAssembler()
+    .setInputCols(Array("hour", "mobile", "user_features"))
+    .setOutputCol("features")
 
-  val bucketizer = new Bucketizer()
-    .setInputCol("features")
-    .setOutputCol("bucketedFeatures")
-    .setSplits(splits)
+  val output = assembler.transform(dataset)
+  log.info("Assembled columns 'hour', 'mobile', 'userFeatures' to vector column 'features'")
+  val resultDF = output.select("features", "clicked")
 
-  // Transform original data into its bucket index.
-  val bucketedData = bucketizer.transform(dataFrame)
+  resultDF.show(false)
 
-  println(s"Bucketizer output with ${bucketizer.getSplits.length - 1} buckets")
-  bucketedData.show()
+  close()
 }

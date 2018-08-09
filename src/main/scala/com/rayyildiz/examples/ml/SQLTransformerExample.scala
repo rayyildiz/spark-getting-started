@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,23 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
+package com.rayyildiz.examples.ml
+
 import com.rayyildiz.SparkSupport
-import org.apache.spark.ml.feature.QuantileDiscretizer
+import org.apache.spark.ml.feature.SQLTransformer
 
 /**
  * Created by rayyildiz on 6/12/2017.
  */
-object QuantileDiscretizerExample extends App with SparkSupport {
+object SQLTransformerExample extends App with SparkSupport {
 
-  val data = Array((0, 18.0), (1, 19.0), (2, 8.0), (3, 5.0), (4, 2.2))
-  val df = spark.createDataFrame(data).toDF("id", "hour")
+  val df = spark.createDataFrame(Seq((0, 1.0, 3.0), (2, 2.0, 5.0))).toDF("id", "v1", "v2")
 
-  val discretizer = new QuantileDiscretizer()
-    .setInputCol("hour")
-    .setOutputCol("result")
-    .setNumBuckets(3)
+  val sqlTrans = new SQLTransformer().setStatement("SELECT *, (v1 + v2) AS col1, (v1 * v2) AS col2, (v1 - v2) AS col3 FROM __THIS__")
 
-  val result = discretizer.fit(df).transform(df)
-  result.show()
+  val resultDF = sqlTrans.transform(df)
+
+  resultDF.show()
+
+  close()
 }

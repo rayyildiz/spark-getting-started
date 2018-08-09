@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,35 +19,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
+package com.rayyildiz.examples.ml
+
 import com.rayyildiz.SparkSupport
-import org.apache.spark.ml.feature.MaxAbsScaler
+import org.apache.spark.ml.feature.PolynomialExpansion
 import org.apache.spark.ml.linalg.Vectors
 
 /**
  * Created by rayyildiz on 6/12/2017.
  */
-object MaxAbsScalerExample extends App with SparkSupport {
+object PolynomialExpansionExample extends App with SparkSupport {
 
-  val dataFrame = spark
-    .createDataFrame(
-      Seq(
-        (0, Vectors.dense(1.0, 0.1, -8.0)),
-        (1, Vectors.dense(2.0, 1.0, -4.0)),
-        (2, Vectors.dense(4.0, 10.0, 8.0))
-      )
-    )
-    .toDF("id", "features")
+  val data = Array(
+    Vectors.dense(2.0, 1.0),
+    Vectors.dense(0.0, 0.0),
+    Vectors.dense(3.0, -1.0)
+  )
+  val df = spark.createDataFrame(data.map(Tuple1.apply)).toDF("features")
 
-  val scaler = new MaxAbsScaler()
+  val polyExpansion = new PolynomialExpansion()
     .setInputCol("features")
-    .setOutputCol("scaledFeatures")
+    .setOutputCol("polyFeatures")
+    .setDegree(3)
 
-  // Compute summary statistics and generate MaxAbsScalerModel
-  val scalerModel = scaler.fit(dataFrame)
+  val polyDF = polyExpansion.transform(df)
+  polyDF.show(false)
 
-  // rescale each feature to range [-1, 1]
-  val scaledData = scalerModel.transform(dataFrame)
-  scaledData.select("features", "scaledFeatures").show()
-
+  close()
 }

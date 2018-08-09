@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,28 +19,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
+package com.rayyildiz.examples.ml
+
 import com.rayyildiz.SparkSupport
-import org.apache.spark.ml.feature.ElementwiseProduct
-import org.apache.spark.ml.linalg.Vectors
+import com.rayyildiz.utils.DownloadManager
+import org.apache.spark.ml.feature.StandardScaler
 
 /**
  * Created by rayyildiz on 6/12/2017.
  */
-object ElementwiseProductExample extends App with SparkSupport {
+object StandardScalerExample extends App with SparkSupport {
 
-  // Create some vector data; also works for sparse vectors
-  val dataFrame = spark
-    .createDataFrame(Seq(("a", Vectors.dense(1.0, 2.0, 3.0)), ("b", Vectors.dense(4.0, 5.0, 6.0))))
-    .toDF("id", "vector")
+  DownloadManager.download(
+    "https://raw.githubusercontent.com/apache/spark/master/data/mllib/sample_libsvm_data.txt",
+    "./data/sample_libsvm_data.txt"
+  )
 
-  val transformingVector = Vectors.dense(0.0, 1.0, 2.0)
-  val transformer = new ElementwiseProduct()
-    .setScalingVec(transformingVector)
-    .setInputCol("vector")
-    .setOutputCol("transformedVector")
+  val dataFrame = spark.read.format("libsvm").load("./data/sample_libsvm_data.txt")
 
-  // Batch transform the vectors to create new column:
-  transformer.transform(dataFrame).show()
+  val scaler = new StandardScaler()
+    .setInputCol("features")
+    .setOutputCol("scaledFeatures")
+    .setWithStd(true)
+    .setWithMean(false)
 
+  // Compute summary statistics by fitting the StandardScaler.
+  val scalerModel = scaler.fit(dataFrame)
+
+  // Normalize each feature to have unit standard deviation.
+  val scaledDF = scalerModel.transform(dataFrame)
+  scaledDF.show()
+
+  close()
 }

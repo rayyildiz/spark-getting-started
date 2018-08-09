@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,42 +19,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
+package com.rayyildiz.examples.ml
+
 import com.rayyildiz.SparkSupport
-import org.apache.spark.ml.feature.{Interaction, VectorAssembler}
+import org.apache.spark.ml.feature.MinMaxScaler
+import org.apache.spark.ml.linalg.Vectors
 
 /**
  * Created by rayyildiz on 6/12/2017.
  */
-object InteractionExample extends App with SparkSupport {
+object MinMaxScalerExample extends App with SparkSupport {
 
-  val df = spark
+  val dataFrame = spark
     .createDataFrame(
       Seq(
-        (1, 1, 2, 3, 8, 4, 5),
-        (2, 4, 3, 8, 7, 9, 8),
-        (3, 6, 1, 9, 2, 3, 6),
-        (4, 10, 8, 6, 9, 4, 5),
-        (5, 9, 2, 7, 10, 7, 3),
-        (6, 1, 1, 4, 2, 8, 4)
+        (0, Vectors.dense(1.0, 0.1, -1.0)),
+        (1, Vectors.dense(2.0, 1.1, 1.0)),
+        (2, Vectors.dense(3.0, 10.1, 3.0))
       )
     )
-    .toDF("id1", "id2", "id3", "id4", "id5", "id6", "id7")
+    .toDF("id", "features")
 
-  val assembler1 = new VectorAssembler().setInputCols(Array("id2", "id3", "id4")).setOutputCol("vec1")
+  val scaler = new MinMaxScaler()
+    .setInputCol("features")
+    .setOutputCol("scaled_features")
 
-  val assembled1 = assembler1.transform(df)
+  // Compute summary statistics and generate MinMaxScalerModel
+  val scalerModel = scaler.fit(dataFrame)
 
-  val assembler2 = new VectorAssembler().setInputCols(Array("id5", "id6", "id7")).setOutputCol("vec2")
+  // rescale each feature to range [min, max].
+  val scaledData = scalerModel.transform(dataFrame)
+  log.info(s"Features scaled to range: [${scaler.getMin}, ${scaler.getMax}]")
+  val resultDF = scaledData.select("features", "scaled_features")
 
-  val assembled2 = assembler2.transform(assembled1).select("id1", "vec1", "vec2")
+  resultDF.show()
 
-  val interaction = new Interaction()
-    .setInputCols(Array("id1", "vec1", "vec2"))
-    .setOutputCol("interactedCol")
-
-  val interacted = interaction.transform(assembled2)
-
-  interacted.show(truncate = false)
-
+  close()
 }

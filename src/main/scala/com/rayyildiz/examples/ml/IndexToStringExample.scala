@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,7 +19,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
+package com.rayyildiz.examples.ml
+
 import com.rayyildiz.SparkSupport
 import org.apache.spark.ml.attribute.Attribute
 import org.apache.spark.ml.feature.{IndexToString, StringIndexer}
@@ -48,14 +49,14 @@ object IndexToStringExample extends App with SparkSupport {
     .fit(df)
   val indexed = indexer.transform(df)
 
-  println(
+  log.info(
     s"Transformed string column '${indexer.getInputCol}' " +
       s"to indexed column '${indexer.getOutputCol}'"
   )
   indexed.show()
 
   val inputColSchema = indexed.schema(indexer.getOutputCol)
-  println(
+  log.info(
     s"StringIndexer will store labels in output column metadata: " +
       s"${Attribute.fromStructField(inputColSchema).toString}\n"
   )
@@ -66,10 +67,13 @@ object IndexToStringExample extends App with SparkSupport {
 
   val converted = converter.transform(indexed)
 
-  println(
+  log.info(
     s"Transformed indexed column '${converter.getInputCol}' back to original string " +
       s"column '${converter.getOutputCol}' using labels in metadata"
   )
-  converted.select("id", "categoryIndex", "originalCategory").show()
+  val resultDF = converted.select("id", "categoryIndex", "originalCategory")
 
+  resultDF.show()
+
+  close()
 }

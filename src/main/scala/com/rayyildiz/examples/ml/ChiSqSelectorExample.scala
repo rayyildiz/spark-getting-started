@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,38 +19,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
+package com.rayyildiz.examples.ml
+
 import com.rayyildiz.SparkSupport
-import org.apache.spark.ml.feature.Normalizer
+import org.apache.spark.ml.feature.ChiSqSelector
 import org.apache.spark.ml.linalg.Vectors
 
 /**
  * Created by rayyildiz on 6/12/2017.
  */
-object NormalizerExample extends App with SparkSupport {
+object ChiSqSelectorExample extends App with SparkSupport {
 
-  val dataFrame = spark
-    .createDataFrame(
-      Seq(
-        (0, Vectors.dense(1.0, 0.5, -1.0)),
-        (1, Vectors.dense(2.0, 1.0, 1.0)),
-        (2, Vectors.dense(4.0, 10.0, 2.0))
-      )
-    )
-    .toDF("id", "features")
+  val data = Seq(
+    (7, Vectors.dense(0.0, 0.0, 18.0, 1.0), 1.0),
+    (8, Vectors.dense(0.0, 1.0, 12.0, 0.0), 0.0),
+    (9, Vectors.dense(1.0, 0.0, 15.0, 0.1), 0.0)
+  )
 
-  // Normalize each Vector using $L^1$ norm.
-  val normalizer = new Normalizer()
-    .setInputCol("features")
-    .setOutputCol("normFeatures")
-    .setP(1.0)
+  import spark.implicits._
 
-  val l1NormData = normalizer.transform(dataFrame)
-  println("Normalized using L^1 norm")
-  l1NormData.show()
+  val df = spark.createDataset(data).toDF("id", "features", "clicked")
 
-  // Normalize each Vector using $L^\infty$ norm.
-  val lInfNormData = normalizer.transform(dataFrame, normalizer.p -> Double.PositiveInfinity)
-  println("Normalized using L^inf norm")
-  lInfNormData.show()
+  val selector = new ChiSqSelector()
+    .setNumTopFeatures(1)
+    .setFeaturesCol("features")
+    .setLabelCol("clicked")
+    .setOutputCol("selected_features")
+
+  val resultDF = selector.fit(df).transform(df)
+
+  log.info(s"ChiSqSelector output with top ${selector.getNumTopFeatures} features selected")
+  resultDF.show()
+
+  close()
 }

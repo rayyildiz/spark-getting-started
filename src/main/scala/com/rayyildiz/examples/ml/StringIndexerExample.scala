@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,37 +19,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
+package com.rayyildiz.examples.ml
+
 import com.rayyildiz.SparkSupport
-import org.apache.spark.ml.feature.{CountVectorizer, CountVectorizerModel}
+import org.apache.spark.ml.feature.StringIndexer
 
 /**
  * Created by rayyildiz on 6/12/2017.
  */
-object CountVectorizerExample extends App with SparkSupport {
+object StringIndexerExample extends App with SparkSupport {
 
   val df = spark
     .createDataFrame(
-      Seq(
-        (0, Array("a", "b", "c")),
-        (1, Array("a", "b", "b", "c", "a"))
-      )
+      Seq((0, "cat1"), (1, "cat2"), (2, "cat3"), (3, "cat4"), (4, "cat5"), (5, "cat6"))
     )
-    .toDF("id", "words")
+    .toDF("id", "category")
 
-  // fit a CountVectorizerModel from the corpus
-  val cvModel: CountVectorizerModel = new CountVectorizer()
-    .setInputCol("words")
-    .setOutputCol("features")
-    .setVocabSize(3)
-    .setMinDF(2)
-    .fit(df)
+  val indexer = new StringIndexer()
+    .setInputCol("category")
+    .setOutputCol("category_index")
 
-  // alternatively, define CountVectorizerModel with a-priori vocabulary
-  val cvm = new CountVectorizerModel(Array("a", "b", "c"))
-    .setInputCol("words")
-    .setOutputCol("features")
+  val indexed = indexer.fit(df).transform(df)
+  indexed.show()
 
-  cvModel.transform(df).show(false)
-
+  close()
 }

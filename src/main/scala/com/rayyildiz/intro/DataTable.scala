@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@ object DataTable extends App with SparkSupport {
   // Create a view
   monthly.createTempView("monthly")
 
-  monthly.show(10)
+  monthly.show()
 
   // Let' look at the data types.
   monthly.dtypes.foreach(println)
@@ -47,11 +47,10 @@ object DataTable extends App with SparkSupport {
   // top 10  records ordered by total column.
   val query = spark.sql("SELECT * FROM monthly WHERE total > 16000 ORDER BY total desc")
 
-  query.show(10)
+  query.show()
 
   // Wait for enter , so you can see the spark UI
   // waitForEnter
 
-  spark.stop()
-
+  close()
 }

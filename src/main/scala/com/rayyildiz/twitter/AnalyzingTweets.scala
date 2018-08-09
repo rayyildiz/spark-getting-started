@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,13 +38,12 @@ object AnalyzingTweets extends App with SparkSupport {
     System.exit(0)
   }
 
-
   import spark.implicits._
 
   val props = new Properties
   props.setProperty("annotators", "tokenize, ssplit, pos, lemma, parse, sentiment")
 
-  val ssc = new StreamingContext(spark.sparkContext, Seconds(1))
+  val ssc = new StreamingContext(spark.sparkContext, Seconds(10))
 
   System.setProperty("twitter4j.oauth.consumerKey", consumerKey)
   System.setProperty("twitter4j.oauth.consumerSecret", consumerSecret)
@@ -74,6 +73,6 @@ object AnalyzingTweets extends App with SparkSupport {
   // Wait for enter , so you can see the spark UI
   // waitForEnter
 
-  spark.close()
+  close()
 
 }

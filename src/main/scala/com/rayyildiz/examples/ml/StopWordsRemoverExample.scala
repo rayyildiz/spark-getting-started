@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,35 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
+package com.rayyildiz.examples.ml
+
 import com.rayyildiz.SparkSupport
-import org.apache.spark.ml.feature.MinMaxScaler
-import org.apache.spark.ml.linalg.Vectors
+import org.apache.spark.ml.feature.StopWordsRemover
 
 /**
  * Created by rayyildiz on 6/12/2017.
  */
-object MinMaxScalerExample extends App with SparkSupport {
+object StopWordsRemoverExample extends App with SparkSupport {
 
-  val dataFrame = spark
+  val remover = new StopWordsRemover()
+    .setInputCol("raw")
+    .setOutputCol("filtered")
+
+  val dataSet = spark
     .createDataFrame(
       Seq(
-        (0, Vectors.dense(1.0, 0.1, -1.0)),
-        (1, Vectors.dense(2.0, 1.1, 1.0)),
-        (2, Vectors.dense(3.0, 10.1, 3.0))
+        (0, Seq("I", "see", "the", "red", "balloon")),
+        (1, Seq("You", "have", "a", "pencil"))
       )
     )
-    .toDF("id", "features")
+    .toDF("id", "raw")
 
-  val scaler = new MinMaxScaler()
-    .setInputCol("features")
-    .setOutputCol("scaledFeatures")
+  val resultDF = remover.transform(dataSet)
 
-  // Compute summary statistics and generate MinMaxScalerModel
-  val scalerModel = scaler.fit(dataFrame)
+  resultDF.show(false)
 
-  // rescale each feature to range [min, max].
-  val scaledData = scalerModel.transform(dataFrame)
-  println(s"Features scaled to range: [${scaler.getMin}, ${scaler.getMax}]")
-  scaledData.select("features", "scaledFeatures").show()
+  close()
 }

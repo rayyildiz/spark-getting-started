@@ -12,7 +12,7 @@ javaOptions in run ++= Seq(
 
 resolvers += "Spark Packages Repo" at "http://dl.bintray.com/spark-packages/maven/"
 
-val sparkVersion = "2.2.1"
+val sparkVersion = "2.3.1"
 val standfordNlpVersion = "3.6.0"
 
 libraryDependencies ++= Seq(

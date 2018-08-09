@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,27 +20,38 @@
  * SOFTWARE.
  */
 package com.rayyildiz
-import org.apache.log4j.LogManager
+import org.apache.log4j.{LogManager, Logger}
 import org.apache.spark.sql.SparkSession
 
 import scala.io.StdIn
 
 trait SparkSupport {
-  lazy val log = LogManager.getLogger(getClass)
+  lazy val log: Logger = LogManager.getLogger(getClass)
   private val EnvHadoopHomeDir = "hadoop.home.dir"
 
   if (System.getProperty(EnvHadoopHomeDir) == null || System.getProperty(EnvHadoopHomeDir).isEmpty) {
     log.error(s"not defined '$EnvHadoopHomeDir' system environment")
   }
 
-  lazy val spark = SparkSession.builder.appName("GettingStarted").master("local[*]").getOrCreate()
+  /**
+   * Create or get spark session.
+   */
+  lazy val spark: SparkSession = SparkSession.builder
+    .appName("GettingStarted")
+    .master("local[*]")
+    .getOrCreate()
 
   /**
    * Wait for enter.
    */
-  def waitForEnter = {
+  def waitForEnter: String = {
     Console.println("To finish press [ENTER] key")
     StdIn.readLine()
   }
 
+  def close(): Unit = {
+    log.info("Stopping spark...")
+    spark.close()
+    log.info("Spark server stopped")
+  }
 }

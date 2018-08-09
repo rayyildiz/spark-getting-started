@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,41 +19,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
+package com.rayyildiz.examples.ml
+
 import com.rayyildiz.SparkSupport
-import org.apache.spark.ml.feature.Word2Vec
-import org.apache.spark.sql.Row
-import org.apache.spark.ml.linalg.Vector
+import org.apache.spark.ml.feature.{OneHotEncoder, StringIndexer}
 
 /**
  * Created by rayyildiz on 6/12/2017.
  */
-object Word2VecExample extends App with SparkSupport {
+object OneHotEncoderExample extends App with SparkSupport {
 
-  // Input data: Each row is a bag of words from a sentence or document.
-  val documentDF = spark
+  val df = spark
     .createDataFrame(
       Seq(
-        "Hi I heard about Spark".split(" "),
-        "I wish Java could use case classes".split(" "),
-        "Logistic regression models are neat".split(" ")
-      ).map(Tuple1.apply)
+        (0, "a"),
+        (1, "b"),
+        (2, "c"),
+        (3, "a"),
+        (4, "a"),
+        (5, "c")
+      )
     )
-    .toDF("text")
+    .toDF("id", "category")
 
-  // Learn a mapping from words to Vectors.
-  val word2Vec = new Word2Vec()
-    .setInputCol("text")
-    .setOutputCol("result")
-    .setVectorSize(300)
-    .setMinCount(0)
+  val indexer = new StringIndexer()
+    .setInputCol("category")
+    .setOutputCol("categoryIndex")
+    .fit(df)
+  val indexed = indexer.transform(df)
 
-  val model = word2Vec.fit(documentDF)
+  val encoder = new OneHotEncoder()
+    .setInputCol("categoryIndex")
+    .setOutputCol("categoryVec")
 
-  val result = model.transform(documentDF)
-  result.collect().foreach {
-    case Row(text: Seq[_], features: Vector) =>
-      println(s"Text: [${text.mkString(", ")}] => \nVector: $features\n")
-  }
+  val encodedDF = encoder.transform(indexed)
+  encodedDF.show()
 
+  close()
 }

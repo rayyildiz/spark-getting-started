@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ramazan AYYILDIZ
+ * Copyright (c) 2017 Ramazan AYYILDIZ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,26 +19,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.rayyildiz.examples
+package com.rayyildiz.examples.ml
+
 import com.rayyildiz.SparkSupport
-import org.apache.spark.ml.feature.StringIndexer
+import org.apache.spark.ml.feature.DCT
+import org.apache.spark.ml.linalg.Vectors
 
 /**
  * Created by rayyildiz on 6/12/2017.
  */
-object StringIndexerExample extends App with SparkSupport {
+object DiscreteCosineTransformExample extends App with SparkSupport {
 
-  val df = spark
-    .createDataFrame(
-      Seq((0, "a"), (1, "b"), (2, "c"), (3, "a"), (4, "a"), (5, "c"))
-    )
-    .toDF("id", "category")
+  val data =
+    Seq(Vectors.dense(0.0, 1.0, -2.0, 3.0), Vectors.dense(-1.0, 2.0, 4.0, -7.0), Vectors.dense(14.0, -2.0, -5.0, 1.0))
 
-  val indexer = new StringIndexer()
-    .setInputCol("category")
-    .setOutputCol("categoryIndex")
+  val df = spark.createDataFrame(data.map(Tuple1.apply)).toDF("features")
 
-  val indexed = indexer.fit(df).transform(df)
-  indexed.show()
+  val dct = new DCT()
+    .setInputCol("features")
+    .setOutputCol("featuresDCT")
+    .setInverse(false)
 
+  val dctDf = dct.transform(df)
+  val resultDF = dctDf.select("featuresDCT")
+
+  resultDF.show(false)
+
+  close()
 }
