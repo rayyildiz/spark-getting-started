@@ -22,13 +22,12 @@
 package dev.rayyildiz.examples.ml
 
 import dev.rayyildiz.SparkSupport
-import dev.rayyildiz.SparkSupport
 import org.apache.spark.ml.attribute.Attribute
 import org.apache.spark.ml.feature.{IndexToString, StringIndexer}
 
 /**
- * Created by rayyildiz on 6/12/2017.
- */
+  * Created by rayyildiz on 6/12/2017.
+  */
 object IndexToStringExample extends App with SparkSupport {
 
   val df = spark

@@ -22,13 +22,12 @@
 package dev.rayyildiz.examples.ml
 
 import dev.rayyildiz.SparkSupport
-import dev.rayyildiz.SparkSupport
 import org.apache.spark.ml.feature.VectorAssembler
 import org.apache.spark.ml.linalg.Vectors
 
 /**
- * Created by rayyildiz on 6/12/2017.
- */
+  * Created by rayyildiz on 6/12/2017.
+  */
 object VectorAssemblerExample extends App with SparkSupport {
 
   val dataset = spark
@@ -42,7 +41,9 @@ object VectorAssemblerExample extends App with SparkSupport {
     .setOutputCol("features")
 
   val output = assembler.transform(dataset)
-  log.info("Assembled columns 'hour', 'mobile', 'userFeatures' to vector column 'features'")
+  log.info(
+    "Assembled columns 'hour', 'mobile', 'userFeatures' to vector column 'features'"
+  )
   val resultDF = output.select("features", "clicked")
 
   resultDF.show(false)

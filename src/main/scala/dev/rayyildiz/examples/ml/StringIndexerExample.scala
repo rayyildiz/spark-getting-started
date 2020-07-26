@@ -22,17 +22,23 @@
 package dev.rayyildiz.examples.ml
 
 import dev.rayyildiz.SparkSupport
-import dev.rayyildiz.SparkSupport
 import org.apache.spark.ml.feature.StringIndexer
 
 /**
- * Created by rayyildiz on 6/12/2017.
- */
+  * Created by rayyildiz on 6/12/2017.
+  */
 object StringIndexerExample extends App with SparkSupport {
 
   val df = spark
     .createDataFrame(
-      Seq((0, "cat1"), (1, "cat2"), (2, "cat3"), (3, "cat4"), (4, "cat5"), (5, "cat6"))
+      Seq(
+        (0, "cat1"),
+        (1, "cat2"),
+        (2, "cat3"),
+        (3, "cat4"),
+        (4, "cat5"),
+        (5, "cat6")
+      )
     )
     .toDF("id", "category")
 

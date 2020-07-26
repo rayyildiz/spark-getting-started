@@ -22,13 +22,12 @@
 package dev.rayyildiz.examples.ml
 
 import dev.rayyildiz.SparkSupport
-import dev.rayyildiz.SparkSupport
 import org.apache.spark.ml.feature.MaxAbsScaler
 import org.apache.spark.ml.linalg.Vectors
 
 /**
- * Created by rayyildiz on 6/12/2017.
- */
+  * Created by rayyildiz on 6/12/2017.
+  */
 object MaxAbsScalerExample extends App with SparkSupport {
 
   val dataFrame = spark

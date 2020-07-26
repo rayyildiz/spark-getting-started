@@ -2,10 +2,9 @@
 
 [![Build Status](https://travis-ci.org/rayyildiz/spark-getting-started.svg?branch=master)](https://travis-ci.org/rayyildiz/spark-getting-started)
 
-This repository contains examples in order learn [Apache Spark](https://spark.apache.org/) . 
+This repository contains examples in order learn [Apache Spark 3.0.0](https://spark.apache.org/) . 
 
 ## First Examples 
-
 
 ### [Word Count](src/main/scala/dev/rayyildiz/examples/WordCount.scala) 
 

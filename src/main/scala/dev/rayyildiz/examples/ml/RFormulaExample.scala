@@ -22,12 +22,11 @@
 package dev.rayyildiz.examples.ml
 
 import dev.rayyildiz.SparkSupport
-import dev.rayyildiz.SparkSupport
 import org.apache.spark.ml.feature.RFormula
 
 /**
- * Created by rayyildiz on 6/12/2017.
- */
+  * Created by rayyildiz on 6/12/2017.
+  */
 object RFormulaExample extends App with SparkSupport {
 
   val dataset = spark

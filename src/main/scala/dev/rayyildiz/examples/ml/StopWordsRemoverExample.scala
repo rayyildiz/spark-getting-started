@@ -22,12 +22,11 @@
 package dev.rayyildiz.examples.ml
 
 import dev.rayyildiz.SparkSupport
-import dev.rayyildiz.SparkSupport
 import org.apache.spark.ml.feature.StopWordsRemover
 
 /**
- * Created by rayyildiz on 6/12/2017.
- */
+  * Created by rayyildiz on 6/12/2017.
+  */
 object StopWordsRemoverExample extends App with SparkSupport {
 
   val remover = new StopWordsRemover()

@@ -26,8 +26,8 @@ import org.apache.spark.ml.feature.{RegexTokenizer, Tokenizer}
 import org.apache.spark.sql.functions.{col, udf}
 
 /**
- * Created by rayyildiz on 6/12/2017.
- */
+  * Created by rayyildiz on 6/12/2017.
+  */
 object TokenizerExample extends App with SparkSupport {
 
   val sentenceDataFrame = spark

@@ -22,13 +22,12 @@
 package dev.rayyildiz.examples.ml
 
 import dev.rayyildiz.SparkSupport
-import dev.rayyildiz.SparkSupport
 import org.apache.spark.ml.feature.Normalizer
 import org.apache.spark.ml.linalg.Vectors
 
 /**
- * Created by rayyildiz on 6/12/2017.
- */
+  * Created by rayyildiz on 6/12/2017.
+  */
 object NormalizerExample extends App with SparkSupport {
 
   val dataFrame = spark
@@ -52,7 +51,8 @@ object NormalizerExample extends App with SparkSupport {
   l1NormData.show()
 
   // Normalize each Vector using $L^\infty$ norm.
-  val lInfNormData = normalizer.transform(dataFrame, normalizer.p -> Double.PositiveInfinity)
+  val lInfNormData =
+    normalizer.transform(dataFrame, normalizer.p -> Double.PositiveInfinity)
   log.info("Normalized using L^inf norm")
   lInfNormData.show()
 

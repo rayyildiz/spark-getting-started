@@ -24,8 +24,8 @@ package dev.rayyildiz.twitter
 import java.util.Properties
 
 import dev.rayyildiz.SparkSupport
-import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.streaming.twitter.TwitterUtils
+import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 object AnalyzingTweets extends App with SparkSupport {
   val consumerKey = System.getenv("TWITTER_CONSUMER_KEY")
@@ -33,16 +33,23 @@ object AnalyzingTweets extends App with SparkSupport {
   val accessToken = System.getenv("TWITTER_ACCESS_TOKEN")
   val accessTokenSecret = System.getenv("TWITTER_ACCESS_SECRET")
 
-  if (consumerKey == null || consumerSecret == null || accessTokenSecret == null || accessToken == null
-      || consumerKey.isEmpty || consumerSecret.isEmpty || accessToken.isEmpty || accessTokenSecret.isEmpty) {
-    log.error(s"you have to define 'TWITTER_CONSUMER_KEY' , 'TWITTER_CONSUMER_SECRET' , 'TWITTER_ACCESS_TOKEN', 'TWITTER_ACCESS_SECRET'")
+  if (
+    consumerKey == null || consumerSecret == null || accessTokenSecret == null || accessToken == null
+    || consumerKey.isEmpty || consumerSecret.isEmpty || accessToken.isEmpty || accessTokenSecret.isEmpty
+  ) {
+    log.error(
+      s"you have to define 'TWITTER_CONSUMER_KEY' , 'TWITTER_CONSUMER_SECRET' , 'TWITTER_ACCESS_TOKEN', 'TWITTER_ACCESS_SECRET'"
+    )
     System.exit(0)
   }
 
   import spark.implicits._
 
   val props = new Properties
-  props.setProperty("annotators", "tokenize, ssplit, pos, lemma, parse, sentiment")
+  props.setProperty(
+    "annotators",
+    "tokenize, ssplit, pos, lemma, parse, sentiment"
+  )
 
   val ssc = new StreamingContext(spark.sparkContext, Seconds(10))
 
@@ -55,7 +62,17 @@ object AnalyzingTweets extends App with SparkSupport {
   val stream = TwitterUtils.createStream(ssc, None, filters)
 
   val tweetsWithBasicInfo =
-    stream.filter(!_.isRetweeted).map(t => (t.getId, t.getText, t.getRetweetCount, t.getUser.getScreenName, t.getLang))
+    stream
+      .filter(!_.isRetweeted)
+      .map(t =>
+        (
+          t.getId,
+          t.getText,
+          t.getRetweetCount,
+          t.getUser.getScreenName,
+          t.getLang
+        )
+      )
 
   tweetsWithBasicInfo.foreachRDD(rdd => {
     val df = rdd.toDF("id", "text", "retweet_count", "user", "language")

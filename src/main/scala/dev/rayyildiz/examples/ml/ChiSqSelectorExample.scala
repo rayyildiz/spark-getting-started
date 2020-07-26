@@ -22,13 +22,12 @@
 package dev.rayyildiz.examples.ml
 
 import dev.rayyildiz.SparkSupport
-import dev.rayyildiz.SparkSupport
 import org.apache.spark.ml.feature.ChiSqSelector
 import org.apache.spark.ml.linalg.Vectors
 
 /**
- * Created by rayyildiz on 6/12/2017.
- */
+  * Created by rayyildiz on 6/12/2017.
+  */
 object ChiSqSelectorExample extends App with SparkSupport {
 
   val data = Seq(
@@ -49,7 +48,9 @@ object ChiSqSelectorExample extends App with SparkSupport {
 
   val resultDF = selector.fit(df).transform(df)
 
-  log.info(s"ChiSqSelector output with top ${selector.getNumTopFeatures} features selected")
+  log.info(
+    s"ChiSqSelector output with top ${selector.getNumTopFeatures} features selected"
+  )
   resultDF.show()
 
   close()

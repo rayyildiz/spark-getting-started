@@ -23,13 +23,11 @@ package dev.rayyildiz.examples.ml
 
 import dev.rayyildiz.SparkSupport
 import dev.rayyildiz.utils.DownloadManager
-import dev.rayyildiz.SparkSupport
-import dev.rayyildiz.utils.DownloadManager
 import org.apache.spark.ml.feature.StandardScaler
 
 /**
- * Created by rayyildiz on 6/12/2017.
- */
+  * Created by rayyildiz on 6/12/2017.
+  */
 object StandardScalerExample extends App with SparkSupport {
 
   DownloadManager.download(
@@ -37,7 +35,8 @@ object StandardScalerExample extends App with SparkSupport {
     "./data/sample_libsvm_data.txt"
   )
 
-  val dataFrame = spark.read.format("libsvm").load("./data/sample_libsvm_data.txt")
+  val dataFrame =
+    spark.read.format("libsvm").load("./data/sample_libsvm_data.txt")
 
   val scaler = new StandardScaler()
     .setInputCol("features")

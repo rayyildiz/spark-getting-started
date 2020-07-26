@@ -23,8 +23,6 @@ package dev.rayyildiz.intro
 
 import dev.rayyildiz.SparkSupport
 import dev.rayyildiz.utils.DownloadManager
-import dev.rayyildiz.SparkSupport
-import dev.rayyildiz.utils.DownloadManager
 
 object DataTable extends App with SparkSupport {
 
@@ -37,7 +35,17 @@ object DataTable extends App with SparkSupport {
   // Create a data frame
   val monthly = spark.read
     .json("./data/data/monthly_json.json")
-    .toDF("Date", "TotalEquity", "DomesticEquity", "WorldEquity", "Hybrid", "TotalBond", "TaxableBond", "MunicipalBond", "Total")
+    .toDF(
+      "Date",
+      "TotalEquity",
+      "DomesticEquity",
+      "WorldEquity",
+      "Hybrid",
+      "TotalBond",
+      "TaxableBond",
+      "MunicipalBond",
+      "Total"
+    )
 
   // Create a view
   monthly.createTempView("monthly")
@@ -48,7 +56,8 @@ object DataTable extends App with SparkSupport {
   monthly.dtypes.foreach(println)
 
   // top 10  records ordered by total column.
-  val query = spark.sql("SELECT * FROM monthly WHERE total > 16000 ORDER BY total desc")
+  val query =
+    spark.sql("SELECT * FROM monthly WHERE total > 16000 ORDER BY total desc")
 
   query.show()
 

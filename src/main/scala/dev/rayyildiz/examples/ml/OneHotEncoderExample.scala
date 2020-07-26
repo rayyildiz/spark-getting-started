@@ -22,12 +22,11 @@
 package dev.rayyildiz.examples.ml
 
 import dev.rayyildiz.SparkSupport
-import dev.rayyildiz.SparkSupport
 import org.apache.spark.ml.feature.{OneHotEncoder, StringIndexer}
 
 /**
- * Created by rayyildiz on 6/12/2017.
- */
+  * Created by rayyildiz on 6/12/2017.
+  */
 object OneHotEncoderExample extends App with SparkSupport {
 
   val df = spark
@@ -53,8 +52,8 @@ object OneHotEncoderExample extends App with SparkSupport {
     .setInputCol("categoryIndex")
     .setOutputCol("categoryVec")
 
-  val encodedDF = encoder.transform(indexed)
-  encodedDF.show()
+//  val encodedDF = encoder.fit(indexed)
+//  encoder.show()
 
   close()
 }

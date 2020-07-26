@@ -30,21 +30,25 @@ trait SparkSupport {
   lazy val log: Logger = LogManager.getLogger(getClass)
   private val EnvHadoopHomeDir = "hadoop.home.dir"
 
-  if (System.getProperty(EnvHadoopHomeDir) == null || System.getProperty(EnvHadoopHomeDir).isEmpty) {
+  if (
+    System.getProperty(EnvHadoopHomeDir) == null || System
+      .getProperty(EnvHadoopHomeDir)
+      .isEmpty
+  ) {
     log.error(s"not defined '$EnvHadoopHomeDir' system environment")
   }
 
   /**
-   * Create or get spark session.
-   */
+    * Create or get spark session.
+    */
   lazy val spark: SparkSession = SparkSession.builder
     .appName("GettingStarted")
     .master("local[*]")
     .getOrCreate()
 
   /**
-   * Wait for enter.
-   */
+    * Wait for enter.
+    */
   def waitForEnter: String = {
     Console.println("To finish press [ENTER] key")
     StdIn.readLine()

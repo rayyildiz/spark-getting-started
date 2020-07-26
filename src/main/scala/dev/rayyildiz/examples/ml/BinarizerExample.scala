@@ -22,12 +22,11 @@
 package dev.rayyildiz.examples.ml
 
 import dev.rayyildiz.SparkSupport
-import dev.rayyildiz.SparkSupport
 import org.apache.spark.ml.feature.Binarizer
 
 /**
- * Created by rayyildiz on 6/12/2017.
- */
+  * Created by rayyildiz on 6/12/2017.
+  */
 object BinarizerExample extends App with SparkSupport {
 
   val data = Array((0, 0.1), (1, 0.8), (2, 0.2))

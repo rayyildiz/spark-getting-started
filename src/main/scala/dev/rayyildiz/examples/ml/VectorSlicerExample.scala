@@ -24,16 +24,19 @@ package dev.rayyildiz.examples.ml
 import java.util.Arrays
 
 import dev.rayyildiz.SparkSupport
-import dev.rayyildiz.SparkSupport
-import org.apache.spark.ml.attribute.{Attribute, AttributeGroup, NumericAttribute}
+import org.apache.spark.ml.attribute.{
+  Attribute,
+  AttributeGroup,
+  NumericAttribute
+}
 import org.apache.spark.ml.feature.VectorSlicer
 import org.apache.spark.ml.linalg.Vectors
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types.StructType
 
 /**
- * Created by rayyildiz on 6/12/2017.
- */
+  * Created by rayyildiz on 6/12/2017.
+  */
 object VectorSlicerExample extends App with SparkSupport {
 
   val data = Arrays.asList(
@@ -43,11 +46,14 @@ object VectorSlicerExample extends App with SparkSupport {
 
   val defaultAttr = NumericAttribute.defaultAttr
   val attrs = Array("f1", "f2", "f3").map(defaultAttr.withName)
-  val attrGroup = new AttributeGroup("user_features", attrs.asInstanceOf[Array[Attribute]])
+  val attrGroup =
+    new AttributeGroup("user_features", attrs.asInstanceOf[Array[Attribute]])
 
-  val dataset = spark.createDataFrame(data, StructType(Array(attrGroup.toStructField())))
+  val dataset =
+    spark.createDataFrame(data, StructType(Array(attrGroup.toStructField())))
 
-  val slicer = new VectorSlicer().setInputCol("user_features").setOutputCol("features")
+  val slicer =
+    new VectorSlicer().setInputCol("user_features").setOutputCol("features")
 
   slicer.setIndices(Array(1)).setNames(Array("f3"))
   // or slicer.setIndices(Array(1, 2)), or slicer.setNames(Array("f2", "f3"))

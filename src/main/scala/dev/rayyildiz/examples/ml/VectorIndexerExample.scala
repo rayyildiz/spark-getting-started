@@ -23,13 +23,11 @@ package dev.rayyildiz.examples.ml
 
 import dev.rayyildiz.SparkSupport
 import dev.rayyildiz.utils.DownloadManager
-import dev.rayyildiz.SparkSupport
-import dev.rayyildiz.utils.DownloadManager
 import org.apache.spark.ml.feature.VectorIndexer
 
 /**
- * Created by rayyildiz on 6/12/2017.
- */
+  * Created by rayyildiz on 6/12/2017.
+  */
 object VectorIndexerExample extends App with SparkSupport {
   DownloadManager.download(
     "https://raw.githubusercontent.com/apache/spark/master/data/mllib/sample_libsvm_data.txt",

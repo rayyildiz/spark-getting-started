@@ -25,8 +25,8 @@ import dev.rayyildiz.SparkSupport
 import org.apache.spark.ml.feature.{HashingTF, IDF, Tokenizer}
 
 /**
- * Created by rayyildiz on 6/12/2017.
- */
+  * Created by rayyildiz on 6/12/2017.
+  */
 object FirstExample extends App with SparkSupport {
 
   val sentenceData = spark

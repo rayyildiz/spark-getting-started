@@ -22,15 +22,15 @@
 package dev.rayyildiz.examples.ml
 
 import dev.rayyildiz.SparkSupport
-import dev.rayyildiz.SparkSupport
 import org.apache.spark.ml.feature.Bucketizer
 
 /**
- * Created by rayyildiz on 6/12/2017.
- */
+  * Created by rayyildiz on 6/12/2017.
+  */
 object BucketizerExample extends App with SparkSupport {
 
-  val splits = Array(Double.NegativeInfinity, -0.5, 0.0, 0.5, Double.PositiveInfinity)
+  val splits =
+    Array(Double.NegativeInfinity, -0.5, 0.0, 0.5, Double.PositiveInfinity)
 
   val data = Array(-999.9, -0.5, -0.3, 0.0, 0.2, 999.9)
   val dataFrame = spark.createDataFrame(data.map(Tuple1.apply)).toDF("features")

@@ -35,11 +35,11 @@ object DownloadManager {
   private val log = LogManager.getLogger(DownloadManager.getClass)
 
   /**
-   * Download file from internet.
-   *
-   * @param url        Full path.
-   * @param targetFile Target local path.
-   */
+    * Download file from internet.
+    *
+    * @param url        Full path.
+    * @param targetFile Target local path.
+    */
   def download(url: String, targetFile: String): Unit = {
     val target = new File(targetFile)
     if (target.exists()) {
@@ -54,18 +54,19 @@ object DownloadManager {
           unzip(target, target.getParentFile)
           log.info(s"unzip finished. ${target.getAbsolutePath}")
         } catch {
-          case e: InvalidPathException => log.error(s"could not unzip for $targetFile", e)
+          case e: InvalidPathException =>
+            log.error(s"could not unzip for $targetFile", e)
         }
       }
     }
   }
 
   /**
-   * Unzip zip file to destination folder.
-   *
-   * @param file            ZipFile
-   * @param destinationFile destination path.
-   */
+    * Unzip zip file to destination folder.
+    *
+    * @param file            ZipFile
+    * @param destinationFile destination path.
+    */
   def unzip(file: File, destinationFile: File): Unit = {
     val zipFile = new FileInputStream(file)
     val destination = destinationFile.toPath
@@ -83,7 +84,10 @@ object DownloadManager {
         val outFile = outPath.toFile
         val out = new FileOutputStream(outFile)
         val buffer = new Array[Byte](4096)
-        Stream.continually(zis.read(buffer)).takeWhile(_ != -1).foreach(out.write(buffer, 0, _))
+        Stream
+          .continually(zis.read(buffer))
+          .takeWhile(_ != -1)
+          .foreach(out.write(buffer, 0, _))
       }
     }
   }

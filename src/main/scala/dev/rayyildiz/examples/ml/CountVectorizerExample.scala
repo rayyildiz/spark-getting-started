@@ -25,8 +25,8 @@ import dev.rayyildiz.SparkSupport
 import org.apache.spark.ml.feature.{CountVectorizer, CountVectorizerModel}
 
 /**
- * Created by rayyildiz on 6/12/2017.
- */
+  * Created by rayyildiz on 6/12/2017.
+  */
 object CountVectorizerExample extends App with SparkSupport {
 
   val df = spark
