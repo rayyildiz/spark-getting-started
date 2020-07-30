@@ -33,10 +33,8 @@ object AnalyzingTweets extends App with SparkSupport {
   val accessToken = System.getenv("TWITTER_ACCESS_TOKEN")
   val accessTokenSecret = System.getenv("TWITTER_ACCESS_SECRET")
 
-  if (
-    consumerKey == null || consumerSecret == null || accessTokenSecret == null || accessToken == null
-    || consumerKey.isEmpty || consumerSecret.isEmpty || accessToken.isEmpty || accessTokenSecret.isEmpty
-  ) {
+  if (consumerKey == null || consumerSecret == null || accessTokenSecret == null || accessToken == null
+      || consumerKey.isEmpty || consumerSecret.isEmpty || accessToken.isEmpty || accessTokenSecret.isEmpty) {
     log.error(
       s"you have to define 'TWITTER_CONSUMER_KEY' , 'TWITTER_CONSUMER_SECRET' , 'TWITTER_ACCESS_TOKEN', 'TWITTER_ACCESS_SECRET'"
     )
@@ -64,15 +62,15 @@ object AnalyzingTweets extends App with SparkSupport {
   val tweetsWithBasicInfo =
     stream
       .filter(!_.isRetweeted)
-      .map(t =>
-        (
-          t.getId,
-          t.getText,
-          t.getRetweetCount,
-          t.getUser.getScreenName,
-          t.getLang
-        )
-      )
+      .map(
+        t =>
+          (
+            t.getId,
+            t.getText,
+            t.getRetweetCount,
+            t.getUser.getScreenName,
+            t.getLang
+        ))
 
   tweetsWithBasicInfo.foreachRDD(rdd => {
     val df = rdd.toDF("id", "text", "retweet_count", "user", "language")

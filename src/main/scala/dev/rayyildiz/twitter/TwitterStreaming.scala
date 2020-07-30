@@ -37,10 +37,8 @@ object TwitterStreaming extends App with SparkSupport {
   val accessToken = System.getenv("TWITTER_ACCESS_TOKEN")
   val accessTokenSecret = System.getenv("TWITTER_ACCESS_SECRET")
 
-  if (
-    consumerKey == null || consumerSecret == null || accessTokenSecret == null || accessToken == null
-    || consumerKey.isEmpty || consumerSecret.isEmpty || accessToken.isEmpty || accessTokenSecret.isEmpty
-  ) {
+  if (consumerKey == null || consumerSecret == null || accessTokenSecret == null || accessToken == null
+      || consumerKey.isEmpty || consumerSecret.isEmpty || accessToken.isEmpty || accessTokenSecret.isEmpty) {
     log.error(
       s"you have to define 'TWITTER_CONSUMER_KEY' , 'TWITTER_CONSUMER_SECRET' , 'TWITTER_ACCESS_TOKEN', 'TWITTER_ACCESS_SECRET'"
     )

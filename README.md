@@ -1,6 +1,7 @@
 # Spark Getting Started 
 
 [![Build Status](https://travis-ci.org/rayyildiz/spark-getting-started.svg?branch=master)](https://travis-ci.org/rayyildiz/spark-getting-started)
+![Build status](https://github.com/rayyildiz/spark-getting-started/workflows/build/badge.svg)
 
 This repository contains examples in order learn [Apache Spark 3.0.0](https://spark.apache.org/) . 
 

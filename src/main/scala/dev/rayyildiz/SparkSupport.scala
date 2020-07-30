@@ -30,12 +30,10 @@ trait SparkSupport {
   lazy val log: Logger = LogManager.getLogger(getClass)
   private val EnvHadoopHomeDir = "hadoop.home.dir"
 
-  if (
-    System.getProperty(EnvHadoopHomeDir) == null || System
-      .getProperty(EnvHadoopHomeDir)
-      .isEmpty
-  ) {
-    log.error(s"not defined '$EnvHadoopHomeDir' system environment")
+  if (System.getProperty(EnvHadoopHomeDir) == null || System
+        .getProperty(EnvHadoopHomeDir)
+        .isEmpty) {
+    log.info(s"not defined '$EnvHadoopHomeDir' system environment")
   }
 
   /**
