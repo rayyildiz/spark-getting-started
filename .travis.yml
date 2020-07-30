@@ -3,7 +3,6 @@ jdk:
 - openjdk8
 - openjdk11
 scala:
-- 2.11.12
 - 2.12.12
 install:
   - sudo apt-get update && sudo apt-get --assume-yes install zip unzip
