@@ -17,7 +17,7 @@ data/
 
 # Icon must end with two \r
 Icon
-
+.bsp/
 
 # Thumbnails
 ._*
