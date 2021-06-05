@@ -28,13 +28,15 @@ import org.apache.spark.streaming.twitter.TwitterUtils
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 object AnalyzingTweets extends App with SparkSupport {
-  val consumerKey = System.getenv("TWITTER_CONSUMER_KEY")
-  val consumerSecret = System.getenv("TWITTER_CONSUMER_SECRET")
-  val accessToken = System.getenv("TWITTER_ACCESS_TOKEN")
+  val consumerKey       = System.getenv("TWITTER_CONSUMER_KEY")
+  val consumerSecret    = System.getenv("TWITTER_CONSUMER_SECRET")
+  val accessToken       = System.getenv("TWITTER_ACCESS_TOKEN")
   val accessTokenSecret = System.getenv("TWITTER_ACCESS_SECRET")
 
-  if (consumerKey == null || consumerSecret == null || accessTokenSecret == null || accessToken == null
-      || consumerKey.isEmpty || consumerSecret.isEmpty || accessToken.isEmpty || accessTokenSecret.isEmpty) {
+  if (
+    consumerKey == null || consumerSecret == null || accessTokenSecret == null || accessToken == null
+    || consumerKey.isEmpty || consumerSecret.isEmpty || accessToken.isEmpty || accessTokenSecret.isEmpty
+  ) {
     log.error(
       s"you have to define 'TWITTER_CONSUMER_KEY' , 'TWITTER_CONSUMER_SECRET' , 'TWITTER_ACCESS_TOKEN', 'TWITTER_ACCESS_SECRET'"
     )
@@ -57,20 +59,20 @@ object AnalyzingTweets extends App with SparkSupport {
   System.setProperty("twitter4j.oauth.accessTokenSecret", accessTokenSecret)
 
   val filters = Array("Google", "Apple")
-  val stream = TwitterUtils.createStream(ssc, None, filters)
+  val stream  = TwitterUtils.createStream(ssc, None, filters)
 
   val tweetsWithBasicInfo =
     stream
       .filter(!_.isRetweeted)
-      .map(
-        t =>
-          (
-            t.getId,
-            t.getText,
-            t.getRetweetCount,
-            t.getUser.getScreenName,
-            t.getLang
-        ))
+      .map(t =>
+        (
+          t.getId,
+          t.getText,
+          t.getRetweetCount,
+          t.getUser.getScreenName,
+          t.getLang
+        )
+      )
 
   tweetsWithBasicInfo.foreachRDD(rdd => {
     val df = rdd.toDF("id", "text", "retweet_count", "user", "language")

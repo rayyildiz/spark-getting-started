@@ -49,7 +49,7 @@ object MaxAbsScalerExample extends App with SparkSupport {
 
   // rescale each feature to range [-1, 1]
   val scaledData = scalerModel.transform(dataFrame)
-  val resultDF = scaledData.select("features", "scaledFeatures")
+  val resultDF   = scaledData.select("features", "scaledFeatures")
   resultDF.show()
 
   close()

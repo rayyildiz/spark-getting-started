@@ -44,7 +44,7 @@ object DiscreteCosineTransformExample extends App with SparkSupport {
     .setOutputCol("featuresDCT")
     .setInverse(false)
 
-  val dctDf = dct.transform(df)
+  val dctDf    = dct.transform(df)
   val resultDF = dctDf.select("featuresDCT")
 
   resultDF.show(false)

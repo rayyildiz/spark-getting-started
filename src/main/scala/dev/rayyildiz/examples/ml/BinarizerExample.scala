@@ -29,7 +29,7 @@ import org.apache.spark.ml.feature.Binarizer
   */
 object BinarizerExample extends App with SparkSupport {
 
-  val data = Array((0, 0.1), (1, 0.8), (2, 0.2))
+  val data      = Array((0, 0.1), (1, 0.8), (2, 0.2))
   val dataFrame = spark.createDataFrame(data).toDF("id", "feature")
 
   val binarizer: Binarizer = new Binarizer()

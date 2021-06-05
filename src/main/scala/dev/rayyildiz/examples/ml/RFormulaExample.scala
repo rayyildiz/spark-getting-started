@@ -44,7 +44,7 @@ object RFormulaExample extends App with SparkSupport {
     .setFeaturesCol("features")
     .setLabelCol("label")
 
-  val output = formula.fit(dataset).transform(dataset)
+  val output   = formula.fit(dataset).transform(dataset)
   val resultDF = output.select("features", "label")
 
   resultDF.show()

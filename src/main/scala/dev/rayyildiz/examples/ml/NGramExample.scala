@@ -42,7 +42,7 @@ object NGramExample extends App with SparkSupport {
   val ngram = new NGram().setN(2).setInputCol("words").setOutputCol("ngrams")
 
   val ngramDataFrame = ngram.transform(wordDataFrame)
-  val resultDF = ngramDataFrame.select("ngrams")
+  val resultDF       = ngramDataFrame.select("ngrams")
 
   resultDF.show()
 

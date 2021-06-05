@@ -49,8 +49,8 @@ object WordCount extends App with SparkSupport {
     .cache()
 
   // Let's count the 'and', 'or' and ' ' (SPACE)
-  val numAnd = textFile.filter(line => line.contains("and")).count()
-  val numOr = textFile.filter(line => line.contains("or")).count()
+  val numAnd   = textFile.filter(line => line.contains("and")).count()
+  val numOr    = textFile.filter(line => line.contains("or")).count()
   val numSpace = textFile.filter(line => line.contains(" ")).count()
 
   log.info(s"'and': $numAnd, 'or': $numOr,  [SPACE]: $numSpace")

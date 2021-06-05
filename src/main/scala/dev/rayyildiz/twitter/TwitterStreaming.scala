@@ -32,13 +32,15 @@ object TwitterStreaming extends App with SparkSupport {
     "http://www2.imm.dtu.dk/pubdb/views/edoc_download.php/6010/zip/imm6010.zip",
     "data/imm6010.zip"
   )
-  val consumerKey = System.getenv("TWITTER_CONSUMER_KEY")
-  val consumerSecret = System.getenv("TWITTER_CONSUMER_SECRET")
-  val accessToken = System.getenv("TWITTER_ACCESS_TOKEN")
+  val consumerKey       = System.getenv("TWITTER_CONSUMER_KEY")
+  val consumerSecret    = System.getenv("TWITTER_CONSUMER_SECRET")
+  val accessToken       = System.getenv("TWITTER_ACCESS_TOKEN")
   val accessTokenSecret = System.getenv("TWITTER_ACCESS_SECRET")
 
-  if (consumerKey == null || consumerSecret == null || accessTokenSecret == null || accessToken == null
-      || consumerKey.isEmpty || consumerSecret.isEmpty || accessToken.isEmpty || accessTokenSecret.isEmpty) {
+  if (
+    consumerKey == null || consumerSecret == null || accessTokenSecret == null || accessToken == null
+    || consumerKey.isEmpty || consumerSecret.isEmpty || accessToken.isEmpty || accessTokenSecret.isEmpty
+  ) {
     log.error(
       s"you have to define 'TWITTER_CONSUMER_KEY' , 'TWITTER_CONSUMER_SECRET' , 'TWITTER_ACCESS_TOKEN', 'TWITTER_ACCESS_SECRET'"
     )
@@ -50,9 +52,9 @@ object TwitterStreaming extends App with SparkSupport {
   System.setProperty("twitter4j.oauth.accessToken", accessToken)
   System.setProperty("twitter4j.oauth.accessTokenSecret", accessTokenSecret)
 
-  val ssc = new StreamingContext(spark.sparkContext, Seconds(1))
+  val ssc     = new StreamingContext(spark.sparkContext, Seconds(1))
   val filters = Array("PSG", "Real Madrid", "RealMadrid")
-  val stream = TwitterUtils.createStream(ssc, None, filters)
+  val stream  = TwitterUtils.createStream(ssc, None, filters)
 
   val wordSentimentFilePath = "./data/AFINN/AFINN-111.txt"
   val wordSentiments = spark.sparkContext

@@ -50,11 +50,11 @@ object FirstExample extends App with SparkSupport {
   val featurizedData = hashingTF.transform(wordsData)
   // alternatively, CountVectorizer can also be used to get term frequency vectors
 
-  val idf = new IDF().setInputCol("rawFeatures").setOutputCol("features")
+  val idf      = new IDF().setInputCol("rawFeatures").setOutputCol("features")
   val idfModel = idf.fit(featurizedData)
 
   val rescaledData = idfModel.transform(featurizedData)
-  val resultDF = rescaledData.select("label", "features")
+  val resultDF     = rescaledData.select("label", "features")
   resultDF.show()
 
   close()

@@ -27,12 +27,14 @@ import org.apache.spark.sql.SparkSession
 import scala.io.StdIn
 
 trait SparkSupport {
-  lazy val log: Logger = LogManager.getLogger(getClass)
+  lazy val log: Logger         = LogManager.getLogger(getClass)
   private val EnvHadoopHomeDir = "hadoop.home.dir"
 
-  if (System.getProperty(EnvHadoopHomeDir) == null || System
-        .getProperty(EnvHadoopHomeDir)
-        .isEmpty) {
+  if (
+    System.getProperty(EnvHadoopHomeDir) == null || System
+      .getProperty(EnvHadoopHomeDir)
+      .isEmpty
+  ) {
     log.info(s"not defined '$EnvHadoopHomeDir' system environment")
   }
 

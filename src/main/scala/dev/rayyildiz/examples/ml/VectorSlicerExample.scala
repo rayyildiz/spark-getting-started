@@ -24,11 +24,7 @@ package dev.rayyildiz.examples.ml
 import java.util.Arrays
 
 import dev.rayyildiz.SparkSupport
-import org.apache.spark.ml.attribute.{
-  Attribute,
-  AttributeGroup,
-  NumericAttribute
-}
+import org.apache.spark.ml.attribute.{Attribute, AttributeGroup, NumericAttribute}
 import org.apache.spark.ml.feature.VectorSlicer
 import org.apache.spark.ml.linalg.Vectors
 import org.apache.spark.sql.Row
@@ -45,7 +41,7 @@ object VectorSlicerExample extends App with SparkSupport {
   )
 
   val defaultAttr = NumericAttribute.defaultAttr
-  val attrs = Array("f1", "f2", "f3").map(defaultAttr.withName)
+  val attrs       = Array("f1", "f2", "f3").map(defaultAttr.withName)
   val attrGroup =
     new AttributeGroup("user_features", attrs.asInstanceOf[Array[Attribute]])
 
