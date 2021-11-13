@@ -2,7 +2,7 @@ name := "spark-getting-started"
 organization := "dev.rayyildiz"
 version := "0.6.0-pre"
 
-scalaVersion := "2.12.13"
+scalaVersion := "2.12.10"
 
 fork / run := true
 run / javaOptions ++= Seq(
