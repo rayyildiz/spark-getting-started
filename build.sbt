@@ -12,7 +12,7 @@ run / javaOptions ++= Seq(
 
 //resolvers += "Spark Packages Repo" at "https://dl.bintray.com/spark-packages/maven/"
 
-val sparkVersion        = "3.1.1"
+val sparkVersion        = "3.2.0"
 val standfordNlpVersion = "4.0.0"
 
 bintrayRepository := "pkg"
