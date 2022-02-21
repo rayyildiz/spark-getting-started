@@ -1,5 +1,5 @@
 name := "spark-getting-started"
-organization := "dev.rayyildiz"
+organization := "ai.ayyildiz"
 version := "0.6.0-pre"
 
 scalaVersion := "2.12.10"
@@ -12,11 +12,11 @@ run / javaOptions ++= Seq(
 
 //resolvers += "Spark Packages Repo" at "https://dl.bintray.com/spark-packages/maven/"
 
-val sparkVersion        = "3.2.0"
+val sparkVersion        = "3.2.1"
 val standfordNlpVersion = "4.0.0"
 
 bintrayRepository := "pkg"
-licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
+licenses += ("MIT", url("https://opensource.org/licenses/MIT"))
 
 libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-sql"               % sparkVersion,
