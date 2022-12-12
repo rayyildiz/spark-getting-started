@@ -10,8 +10,6 @@ run / javaOptions ++= Seq(
   "-Dlog4j.configuration=log4j.properties"
 )
 
-//resolvers += "Spark Packages Repo" at "https://dl.bintray.com/spark-packages/maven/"
-
 val sparkVersion        = "3.3.1"
 val standfordNlpVersion = "4.5.1"
 
