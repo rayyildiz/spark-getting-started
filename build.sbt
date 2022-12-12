@@ -1,8 +1,8 @@
 name := "spark-getting-started"
 organization := "ai.ayyildiz"
-version := "0.6.0-pre"
+version := "0.7.0-pre"
 
-scalaVersion := "2.12.10"
+scalaVersion := "2.12.17"
 
 fork / run := true
 run / javaOptions ++= Seq(
@@ -12,10 +12,9 @@ run / javaOptions ++= Seq(
 
 //resolvers += "Spark Packages Repo" at "https://dl.bintray.com/spark-packages/maven/"
 
-val sparkVersion        = "3.2.1"
-val standfordNlpVersion = "4.0.0"
+val sparkVersion        = "3.3.1"
+val standfordNlpVersion = "4.5.1"
 
-bintrayRepository := "pkg"
 licenses += ("MIT", url("https://opensource.org/licenses/MIT"))
 
 libraryDependencies ++= Seq(
@@ -25,5 +24,5 @@ libraryDependencies ++= Seq(
   "org.apache.bahir" %% "spark-streaming-twitter" % "2.4.0" excludeAll ExclusionRule(organization = "org.apache.spark"),
   "edu.stanford.nlp"  % "stanford-corenlp"        % standfordNlpVersion,
   "edu.stanford.nlp"  % "stanford-corenlp"        % standfordNlpVersion classifier "models",
-  "org.scalatest"    %% "scalatest"               % "3.2.7" % "test"
+  "org.scalatest"    %% "scalatest"               % "3.2.14" % "test"
 )
