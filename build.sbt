@@ -10,7 +10,7 @@ run / javaOptions ++= Seq(
   "-Dlog4j.configuration=log4j.properties"
 )
 
-val sparkVersion        = "3.3.1"
+val sparkVersion        = "3.4.1"
 val standfordNlpVersion = "4.5.1"
 
 licenses += ("MIT", url("https://opensource.org/licenses/MIT"))
